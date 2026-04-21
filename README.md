@@ -49,12 +49,12 @@ Avant de lancer le projet, assurez-vous d'avoir installé :
 
 ### Étape 1 — Télécharger le projet
 
-Décompresser le fichier `ventes_dashboard.zip` dans un dossier de votre choix.
+Décompresser le fichier `dashboard_ventes_ecom-main.zip` dans un dossier de votre choix.
 
 ### Étape 2 — Ouvrir dans VS Code
 
 ```
-Fichier → Ouvrir le dossier → sélectionner ventes_dashboard
+Fichier → Ouvrir le dossier → sélectionner dashboard_ventes_ecom-main
 ```
 
 ### Étape 3 — Ouvrir le terminal
@@ -66,7 +66,7 @@ Ctrl + ù
 ### Étape 4 — Se placer dans le bon dossier
 
 ```bash
-cd ventes_dashboard
+cd dashboard_ventes_ecom-main
 ```
 
 ### Étape 5 — Créer l'environnement virtuel
