@@ -1,0 +1,601 @@
+ID_Commande,ID_Produit,Produit,Prix,Quantite,Remise,Categorie
+1001,210,Webcam Logitech,81.09,3,25,Peripherique
+1002,213,Hub USB,47.1,4,10,Accessoire
+1003,214,Tapis de souris XL,26.25,5,0,Accessoire
+1004,213,Hub USB,47.89,1,0,Accessoire
+1005,207,Ecran LG 27,376.84,1,20,Affichage
+1006,202,Ecouteurs Sony,161.38,4,15,Audio
+1007,203,Tablette iPad,861.77,1,0,Mobile
+1008,200,Smartphone Samsung,584.85,1,0,Mobile
+1009,201,Laptop Dell,1208.66,3,5,Informatique
+1010,210,Webcam Logitech,86.27,1,0,Peripherique
+1011,212,Chargeur USB-C,29.53,1,0,Accessoire
+1012,207,Ecran LG 27,336.68,1,15,Affichage
+1013,205,Clavier Logitech,86.04,1,5,Peripherique
+1014,202,Ecouteurs Sony,157.45,1,0,Audio
+1015,205,Clavier Logitech,89.05,4,0,Peripherique
+1016,203,Tablette iPad,864.15,2,10,Mobile
+1017,208,Imprimante HP,185.44,3,20,Informatique
+1018,212,Chargeur USB-C,28.86,1,0,Accessoire
+1019,212,Chargeur USB-C,31.02,2,10,Accessoire
+1020,210,Webcam Logitech,78.94,1,0,Peripherique
+1021,206,Souris Razer,60.83,2,0,Peripherique
+1022,210,Webcam Logitech,86.34,2,15,Peripherique
+1023,212,Chargeur USB-C,31.33,4,5,Accessoire
+1024,200,Smartphone Samsung,618.27,5,15,Mobile
+1025,202,Ecouteurs Sony,159.21,3,25,Audio
+1026,206,Souris Razer,62.26,4,0,Peripherique
+1027,214,Tapis de souris XL,23.43,1,0,Accessoire
+1028,205,Clavier Logitech,81.15,1,15,Peripherique
+1029,213,Hub USB,48.62,1,0,Accessoire
+1030,206,Souris Razer,60.78,1,15,Peripherique
+1031,200,Smartphone Samsung,645.01,3,0,Mobile
+1032,210,Webcam Logitech,79.54,4,20,Peripherique
+1033,203,Tablette iPad,761.87,1,25,Mobile
+1034,203,Tablette iPad,855.12,2,15,Mobile
+1035,210,Webcam Logitech,78.68,1,5,Peripherique
+1036,212,Chargeur USB-C,30.66,1,15,Accessoire
+1037,213,Hub USB,53.57,3,5,Accessoire
+1038,203,Tablette iPad,737.75,2,15,Mobile
+1039,210,Webcam Logitech,83.41,4,10,Peripherique
+1040,213,Hub USB,51.08,5,15,Accessoire
+1041,209,Disque SSD 1TB,117.76,2,5,Stockage
+1042,206,Souris Razer,61.25,5,20,Peripherique
+1043,205,Clavier Logitech,83.48,4,15,Peripherique
+1044,201,Laptop Dell,1237.83,4,10,Informatique
+1045,202,Ecouteurs Sony,148.93,2,5,Audio
+1046,204,Montre Apple Watch,424.65,1,15,Wearable
+1047,200,Smartphone Samsung,552.43,3,0,Mobile
+1048,205,Clavier Logitech,93.32,3,10,Peripherique
+1049,205,Clavier Logitech,98.14,5,0,Peripherique
+1050,204,Montre Apple Watch,404.48,5,5,Wearable
+1051,200,Smartphone Samsung,602.3,1,15,Mobile
+1052,208,Imprimante HP,205.36,3,15,Informatique
+1053,212,Chargeur USB-C,29.05,4,10,Accessoire
+1054,211,Casque Bose,310.12,5,25,Audio
+1055,200,Smartphone Samsung,639.75,5,20,Mobile
+1056,206,Souris Razer,59.32,4,5,Peripherique
+1057,205,Clavier Logitech,93.54,3,10,Peripherique
+1058,202,Ecouteurs Sony,161.05,4,15,Audio
+1059,213,Hub USB,50.05,5,20,Accessoire
+1060,214,Tapis de souris XL,27.39,4,15,Accessoire
+1061,202,Ecouteurs Sony,142.4,5,5,Audio
+1062,206,Souris Razer,55.92,1,10,Peripherique
+1063,213,Hub USB,52.01,2,15,Accessoire
+1064,212,Chargeur USB-C,29.64,5,5,Accessoire
+1065,209,Disque SSD 1TB,109.37,4,20,Stockage
+1066,212,Chargeur USB-C,29.92,4,0,Accessoire
+1067,209,Disque SSD 1TB,126.23,3,5,Stockage
+1068,202,Ecouteurs Sony,147.8,2,15,Audio
+1069,203,Tablette iPad,751.16,3,25,Mobile
+1070,205,Clavier Logitech,83.9,1,0,Peripherique
+1071,205,Clavier Logitech,86.3,5,0,Peripherique
+1072,211,Casque Bose,322.95,1,15,Audio
+1073,213,Hub USB,47.76,3,0,Accessoire
+1074,200,Smartphone Samsung,563.7,2,10,Mobile
+1075,211,Casque Bose,293.16,2,10,Audio
+1076,206,Souris Razer,55.04,1,0,Peripherique
+1077,212,Chargeur USB-C,32.24,1,5,Accessoire
+1078,210,Webcam Logitech,83.22,4,20,Peripherique
+1079,202,Ecouteurs Sony,135.14,5,20,Audio
+1080,214,Tapis de souris XL,23.91,1,5,Accessoire
+1081,208,Imprimante HP,208.68,2,10,Informatique
+1082,207,Ecran LG 27,340.4,2,5,Affichage
+1083,202,Ecouteurs Sony,159.22,4,0,Audio
+1084,200,Smartphone Samsung,591.48,1,15,Mobile
+1085,205,Clavier Logitech,89.27,4,5,Peripherique
+1086,214,Tapis de souris XL,26.84,5,5,Accessoire
+1087,214,Tapis de souris XL,25.9,5,0,Accessoire
+1088,205,Clavier Logitech,98.56,1,0,Peripherique
+1089,212,Chargeur USB-C,28.12,1,0,Accessoire
+1090,210,Webcam Logitech,86.07,3,20,Peripherique
+1091,208,Imprimante HP,195.6,4,10,Informatique
+1092,212,Chargeur USB-C,29.8,2,0,Accessoire
+1093,200,Smartphone Samsung,605.47,5,15,Mobile
+1094,201,Laptop Dell,1248.86,2,0,Informatique
+1095,209,Disque SSD 1TB,125.48,5,5,Stockage
+1096,203,Tablette iPad,875.95,1,20,Mobile
+1097,214,Tapis de souris XL,25.85,5,15,Accessoire
+1098,210,Webcam Logitech,73.29,1,5,Peripherique
+1099,206,Souris Razer,60.84,2,0,Peripherique
+1100,213,Hub USB,47.06,5,25,Accessoire
+1101,213,Hub USB,46.19,5,25,Accessoire
+1102,205,Clavier Logitech,90.47,3,5,Peripherique
+1103,200,Smartphone Samsung,596.81,1,10,Mobile
+1104,205,Clavier Logitech,87.71,5,0,Peripherique
+1105,211,Casque Bose,324.7,4,10,Audio
+1106,208,Imprimante HP,199.51,5,10,Informatique
+1107,200,Smartphone Samsung,619.55,3,5,Mobile
+1108,205,Clavier Logitech,89.26,2,10,Peripherique
+1109,204,Montre Apple Watch,423.46,1,0,Wearable
+1110,202,Ecouteurs Sony,162.5,5,10,Audio
+1111,200,Smartphone Samsung,604.22,5,0,Mobile
+1112,213,Hub USB,49.89,5,5,Accessoire
+1113,213,Hub USB,46.7,5,10,Accessoire
+1114,214,Tapis de souris XL,25.15,1,10,Accessoire
+1115,207,Ecran LG 27,317.07,3,10,Affichage
+1116,214,Tapis de souris XL,25.57,1,10,Accessoire
+1117,204,Montre Apple Watch,387.11,4,20,Wearable
+1118,210,Webcam Logitech,83.46,3,20,Peripherique
+1119,209,Disque SSD 1TB,115.8,2,0,Stockage
+1120,210,Webcam Logitech,73.03,3,5,Peripherique
+1121,204,Montre Apple Watch,417.37,4,10,Wearable
+1122,205,Clavier Logitech,83.46,2,0,Peripherique
+1123,212,Chargeur USB-C,30.9,2,5,Accessoire
+1124,201,Laptop Dell,1162.32,2,0,Informatique
+1125,212,Chargeur USB-C,30.97,4,20,Accessoire
+1126,205,Clavier Logitech,88.05,5,0,Peripherique
+1127,207,Ecran LG 27,365.37,4,10,Affichage
+1128,210,Webcam Logitech,80.45,2,0,Peripherique
+1129,208,Imprimante HP,187.9,4,5,Informatique
+1130,202,Ecouteurs Sony,135.11,2,20,Audio
+1131,201,Laptop Dell,1265.44,2,0,Informatique
+1132,209,Disque SSD 1TB,131.22,5,10,Stockage
+1133,207,Ecran LG 27,377.39,5,10,Affichage
+1134,210,Webcam Logitech,84.93,3,5,Peripherique
+1135,209,Disque SSD 1TB,117.09,3,0,Stockage
+1136,214,Tapis de souris XL,24.74,1,10,Accessoire
+1137,202,Ecouteurs Sony,138.67,3,5,Audio
+1138,214,Tapis de souris XL,24.06,5,5,Accessoire
+1139,201,Laptop Dell,1201.73,5,0,Informatique
+1140,212,Chargeur USB-C,27.32,4,0,Accessoire
+1141,202,Ecouteurs Sony,152.39,2,10,Audio
+1142,214,Tapis de souris XL,26.87,4,10,Accessoire
+1143,214,Tapis de souris XL,23.92,2,5,Accessoire
+1144,207,Ecran LG 27,384.99,1,25,Affichage
+1145,212,Chargeur USB-C,29.41,4,10,Accessoire
+1146,211,Casque Bose,326.62,1,0,Audio
+1147,202,Ecouteurs Sony,159.77,4,0,Audio
+1148,212,Chargeur USB-C,32.21,4,5,Accessoire
+1149,214,Tapis de souris XL,22.87,4,10,Accessoire
+1150,212,Chargeur USB-C,31.89,5,5,Accessoire
+1151,212,Chargeur USB-C,29.37,1,25,Accessoire
+1152,214,Tapis de souris XL,23.0,3,0,Accessoire
+1153,208,Imprimante HP,191.33,1,5,Informatique
+1154,209,Disque SSD 1TB,110.81,2,0,Stockage
+1155,205,Clavier Logitech,84.07,4,0,Peripherique
+1156,204,Montre Apple Watch,362.1,4,0,Wearable
+1157,207,Ecran LG 27,341.32,3,25,Affichage
+1158,214,Tapis de souris XL,26.7,5,0,Accessoire
+1159,212,Chargeur USB-C,28.45,1,15,Accessoire
+1160,209,Disque SSD 1TB,128.6,1,10,Stockage
+1161,208,Imprimante HP,209.44,5,5,Informatique
+1162,211,Casque Bose,323.96,3,25,Audio
+1163,213,Hub USB,54.96,4,5,Accessoire
+1164,211,Casque Bose,324.12,3,0,Audio
+1165,204,Montre Apple Watch,382.38,4,15,Wearable
+1166,206,Souris Razer,61.12,2,20,Peripherique
+1167,200,Smartphone Samsung,628.49,3,5,Mobile
+1168,211,Casque Bose,279.44,4,15,Audio
+1169,211,Casque Bose,327.03,1,0,Audio
+1170,203,Tablette iPad,785.01,4,10,Mobile
+1171,212,Chargeur USB-C,28.62,4,15,Accessoire
+1172,214,Tapis de souris XL,25.72,4,15,Accessoire
+1173,202,Ecouteurs Sony,145.05,4,0,Audio
+1174,212,Chargeur USB-C,27.73,5,5,Accessoire
+1175,203,Tablette iPad,806.52,1,10,Mobile
+1176,206,Souris Razer,57.25,5,10,Peripherique
+1177,206,Souris Razer,60.57,3,15,Peripherique
+1178,210,Webcam Logitech,73.46,3,10,Peripherique
+1179,208,Imprimante HP,197.63,3,5,Informatique
+1180,205,Clavier Logitech,94.09,2,10,Peripherique
+1181,209,Disque SSD 1TB,112.97,1,20,Stockage
+1182,206,Souris Razer,63.08,3,10,Peripherique
+1183,214,Tapis de souris XL,25.42,2,5,Accessoire
+1184,202,Ecouteurs Sony,137.04,1,10,Audio
+1185,203,Tablette iPad,745.53,2,5,Mobile
+1186,202,Ecouteurs Sony,164.37,2,10,Audio
+1187,214,Tapis de souris XL,24.32,4,15,Accessoire
+1188,200,Smartphone Samsung,599.61,4,25,Mobile
+1189,207,Ecran LG 27,379.36,4,0,Affichage
+1190,212,Chargeur USB-C,31.02,5,15,Accessoire
+1191,206,Souris Razer,63.99,5,15,Peripherique
+1192,204,Montre Apple Watch,379.02,3,10,Wearable
+1193,202,Ecouteurs Sony,159.02,2,20,Audio
+1194,204,Montre Apple Watch,427.48,3,20,Wearable
+1195,214,Tapis de souris XL,26.09,2,0,Accessoire
+1196,205,Clavier Logitech,82.96,2,0,Peripherique
+1197,204,Montre Apple Watch,375.38,1,5,Wearable
+1198,200,Smartphone Samsung,560.46,2,0,Mobile
+1199,213,Hub USB,46.06,5,15,Accessoire
+1200,201,Laptop Dell,1261.27,3,20,Informatique
+1201,213,Hub USB,45.55,2,0,Accessoire
+1202,203,Tablette iPad,800.37,1,20,Mobile
+1203,210,Webcam Logitech,84.5,1,5,Peripherique
+1204,210,Webcam Logitech,81.5,5,5,Peripherique
+1205,209,Disque SSD 1TB,126.72,4,5,Stockage
+1206,206,Souris Razer,63.18,3,10,Peripherique
+1207,214,Tapis de souris XL,25.61,3,15,Accessoire
+1208,205,Clavier Logitech,83.93,5,20,Peripherique
+1209,208,Imprimante HP,215.42,4,0,Informatique
+1210,209,Disque SSD 1TB,127.25,4,25,Stockage
+1211,200,Smartphone Samsung,629.63,5,20,Mobile
+1212,200,Smartphone Samsung,543.53,5,20,Mobile
+1213,205,Clavier Logitech,94.14,5,10,Peripherique
+1214,210,Webcam Logitech,87.52,5,5,Peripherique
+1215,209,Disque SSD 1TB,113.04,5,10,Stockage
+1216,205,Clavier Logitech,88.03,5,5,Peripherique
+1217,205,Clavier Logitech,92.05,1,5,Peripherique
+1218,212,Chargeur USB-C,32.55,4,0,Accessoire
+1219,206,Souris Razer,60.59,2,10,Peripherique
+1220,209,Disque SSD 1TB,129.22,1,0,Stockage
+1221,206,Souris Razer,60.8,3,25,Peripherique
+1222,200,Smartphone Samsung,653.55,4,20,Mobile
+1223,214,Tapis de souris XL,23.71,5,5,Accessoire
+1224,214,Tapis de souris XL,23.22,1,20,Accessoire
+1225,204,Montre Apple Watch,434.1,2,10,Wearable
+1226,203,Tablette iPad,819.25,3,10,Mobile
+1227,214,Tapis de souris XL,24.96,5,25,Accessoire
+1228,212,Chargeur USB-C,28.47,5,0,Accessoire
+1229,212,Chargeur USB-C,27.76,5,20,Accessoire
+1230,210,Webcam Logitech,81.62,4,20,Peripherique
+1231,214,Tapis de souris XL,25.36,5,25,Accessoire
+1232,202,Ecouteurs Sony,143.92,5,5,Audio
+1233,204,Montre Apple Watch,427.06,3,15,Wearable
+1234,202,Ecouteurs Sony,152.6,3,25,Audio
+1235,214,Tapis de souris XL,26.16,4,25,Accessoire
+1236,206,Souris Razer,57.01,1,0,Peripherique
+1237,213,Hub USB,45.44,3,0,Accessoire
+1238,213,Hub USB,50.24,3,5,Accessoire
+1239,209,Disque SSD 1TB,119.0,2,5,Stockage
+1240,210,Webcam Logitech,76.42,5,20,Peripherique
+1241,205,Clavier Logitech,81.07,2,20,Peripherique
+1242,206,Souris Razer,65.3,4,20,Peripherique
+1243,204,Montre Apple Watch,421.59,4,25,Wearable
+1244,210,Webcam Logitech,79.04,1,20,Peripherique
+1245,202,Ecouteurs Sony,157.52,4,0,Audio
+1246,209,Disque SSD 1TB,117.31,1,10,Stockage
+1247,214,Tapis de souris XL,25.58,2,5,Accessoire
+1248,212,Chargeur USB-C,28.04,2,5,Accessoire
+1249,201,Laptop Dell,1227.11,3,0,Informatique
+1250,212,Chargeur USB-C,32.69,4,5,Accessoire
+1251,213,Hub USB,47.1,4,0,Accessoire
+1252,214,Tapis de souris XL,24.58,4,0,Accessoire
+1253,212,Chargeur USB-C,32.66,5,10,Accessoire
+1254,214,Tapis de souris XL,25.27,3,0,Accessoire
+1255,205,Clavier Logitech,87.75,5,10,Peripherique
+1256,214,Tapis de souris XL,25.9,3,0,Accessoire
+1257,207,Ecran LG 27,347.04,1,25,Affichage
+1258,202,Ecouteurs Sony,141.26,4,0,Audio
+1259,210,Webcam Logitech,73.67,3,5,Peripherique
+1260,202,Ecouteurs Sony,146.86,2,15,Audio
+1261,209,Disque SSD 1TB,124.89,5,0,Stockage
+1262,208,Imprimante HP,196.14,5,10,Informatique
+1263,201,Laptop Dell,1123.2,2,0,Informatique
+1264,206,Souris Razer,55.63,1,10,Peripherique
+1265,213,Hub USB,51.28,4,10,Accessoire
+1266,209,Disque SSD 1TB,124.39,2,25,Stockage
+1267,210,Webcam Logitech,85.16,2,5,Peripherique
+1268,202,Ecouteurs Sony,155.29,5,5,Audio
+1269,213,Hub USB,54.78,5,5,Accessoire
+1270,204,Montre Apple Watch,388.99,2,20,Wearable
+1271,208,Imprimante HP,191.36,4,5,Informatique
+1272,208,Imprimante HP,189.55,2,10,Informatique
+1273,214,Tapis de souris XL,23.35,1,15,Accessoire
+1274,206,Souris Razer,60.42,4,20,Peripherique
+1275,213,Hub USB,48.99,3,0,Accessoire
+1276,201,Laptop Dell,1151.06,2,10,Informatique
+1277,203,Tablette iPad,844.25,4,5,Mobile
+1278,205,Clavier Logitech,88.53,1,5,Peripherique
+1279,205,Clavier Logitech,84.77,1,20,Peripherique
+1280,211,Casque Bose,322.79,4,10,Audio
+1281,207,Ecran LG 27,360.1,1,5,Affichage
+1282,206,Souris Razer,58.0,1,15,Peripherique
+1283,213,Hub USB,47.09,1,5,Accessoire
+1284,206,Souris Razer,61.27,3,20,Peripherique
+1285,212,Chargeur USB-C,29.53,1,10,Accessoire
+1286,202,Ecouteurs Sony,153.02,2,0,Audio
+1287,203,Tablette iPad,854.35,4,20,Mobile
+1288,205,Clavier Logitech,91.99,2,25,Peripherique
+1289,202,Ecouteurs Sony,151.98,3,5,Audio
+1290,201,Laptop Dell,1110.82,1,10,Informatique
+1291,205,Clavier Logitech,89.16,5,10,Peripherique
+1292,212,Chargeur USB-C,27.77,1,25,Accessoire
+1293,201,Laptop Dell,1173.4,4,10,Informatique
+1294,207,Ecran LG 27,318.05,1,5,Affichage
+1295,206,Souris Razer,62.61,3,10,Peripherique
+1296,203,Tablette iPad,850.58,4,0,Mobile
+1297,205,Clavier Logitech,94.45,2,0,Peripherique
+1298,206,Souris Razer,60.68,1,10,Peripherique
+1299,212,Chargeur USB-C,30.9,4,0,Accessoire
+1300,212,Chargeur USB-C,29.38,2,15,Accessoire
+1301,214,Tapis de souris XL,25.88,5,0,Accessoire
+1302,205,Clavier Logitech,87.34,4,0,Peripherique
+1303,205,Clavier Logitech,86.22,4,0,Peripherique
+1304,202,Ecouteurs Sony,160.56,5,0,Audio
+1305,208,Imprimante HP,211.61,1,15,Informatique
+1306,207,Ecran LG 27,378.65,3,10,Affichage
+1307,202,Ecouteurs Sony,137.25,2,20,Audio
+1308,212,Chargeur USB-C,31.49,3,10,Accessoire
+1309,210,Webcam Logitech,77.4,5,10,Peripherique
+1310,200,Smartphone Samsung,562.95,4,0,Mobile
+1311,203,Tablette iPad,778.22,2,15,Mobile
+1312,214,Tapis de souris XL,23.22,2,15,Accessoire
+1313,206,Souris Razer,63.72,4,0,Peripherique
+1314,203,Tablette iPad,817.19,5,0,Mobile
+1315,214,Tapis de souris XL,25.82,3,10,Accessoire
+1316,202,Ecouteurs Sony,152.37,3,20,Audio
+1317,213,Hub USB,47.49,4,5,Accessoire
+1318,209,Disque SSD 1TB,114.05,5,10,Stockage
+1319,202,Ecouteurs Sony,150.67,4,0,Audio
+1320,207,Ecran LG 27,351.08,3,10,Affichage
+1321,214,Tapis de souris XL,26.36,1,5,Accessoire
+1322,204,Montre Apple Watch,366.75,2,5,Wearable
+1323,211,Casque Bose,293.6,3,20,Audio
+1324,214,Tapis de souris XL,27.08,1,10,Accessoire
+1325,213,Hub USB,50.68,5,0,Accessoire
+1326,212,Chargeur USB-C,27.14,1,0,Accessoire
+1327,206,Souris Razer,59.67,3,20,Peripherique
+1328,213,Hub USB,47.58,1,10,Accessoire
+1329,201,Laptop Dell,1217.02,2,5,Informatique
+1330,214,Tapis de souris XL,24.03,4,0,Accessoire
+1331,200,Smartphone Samsung,552.31,1,5,Mobile
+1332,213,Hub USB,50.12,1,5,Accessoire
+1333,214,Tapis de souris XL,23.85,3,0,Accessoire
+1334,212,Chargeur USB-C,31.76,4,0,Accessoire
+1335,213,Hub USB,46.11,1,25,Accessoire
+1336,202,Ecouteurs Sony,150.26,1,5,Audio
+1337,213,Hub USB,51.36,3,5,Accessoire
+1338,204,Montre Apple Watch,372.92,4,15,Wearable
+1339,209,Disque SSD 1TB,108.22,3,0,Stockage
+1340,212,Chargeur USB-C,27.53,5,10,Accessoire
+1341,203,Tablette iPad,731.14,1,15,Mobile
+1342,211,Casque Bose,299.07,4,5,Audio
+1343,201,Laptop Dell,1138.37,5,20,Informatique
+1344,204,Montre Apple Watch,413.59,2,10,Wearable
+1345,200,Smartphone Samsung,592.9,5,5,Mobile
+1346,202,Ecouteurs Sony,146.39,4,20,Audio
+1347,208,Imprimante HP,203.8,5,0,Informatique
+1348,201,Laptop Dell,1291.19,1,0,Informatique
+1349,204,Montre Apple Watch,371.09,3,10,Wearable
+1350,209,Disque SSD 1TB,124.2,5,20,Stockage
+1351,200,Smartphone Samsung,646.02,5,0,Mobile
+1352,202,Ecouteurs Sony,136.57,3,5,Audio
+1353,205,Clavier Logitech,95.33,5,10,Peripherique
+1354,200,Smartphone Samsung,559.84,1,0,Mobile
+1355,203,Tablette iPad,823.43,2,0,Mobile
+1356,213,Hub USB,47.8,3,10,Accessoire
+1357,202,Ecouteurs Sony,147.93,4,20,Audio
+1358,213,Hub USB,52.97,3,10,Accessoire
+1359,212,Chargeur USB-C,27.9,1,20,Accessoire
+1360,210,Webcam Logitech,76.79,2,20,Peripherique
+1361,204,Montre Apple Watch,435.8,4,25,Wearable
+1362,202,Ecouteurs Sony,162.6,3,10,Audio
+1363,205,Clavier Logitech,82.96,4,15,Peripherique
+1364,209,Disque SSD 1TB,131.07,3,20,Stockage
+1365,209,Disque SSD 1TB,110.34,3,5,Stockage
+1366,211,Casque Bose,310.78,1,20,Audio
+1367,205,Clavier Logitech,93.95,1,25,Peripherique
+1368,209,Disque SSD 1TB,125.09,4,5,Stockage
+1369,212,Chargeur USB-C,31.84,3,0,Accessoire
+1370,210,Webcam Logitech,78.95,5,25,Peripherique
+1371,206,Souris Razer,58.83,4,5,Peripherique
+1372,205,Clavier Logitech,91.08,5,20,Peripherique
+1373,206,Souris Razer,63.59,5,0,Peripherique
+1374,214,Tapis de souris XL,23.62,4,5,Accessoire
+1375,208,Imprimante HP,213.96,1,10,Informatique
+1376,202,Ecouteurs Sony,140.52,1,15,Audio
+1377,214,Tapis de souris XL,27.3,2,0,Accessoire
+1378,202,Ecouteurs Sony,141.56,1,15,Audio
+1379,206,Souris Razer,64.23,2,0,Peripherique
+1380,209,Disque SSD 1TB,116.61,2,5,Stockage
+1381,202,Ecouteurs Sony,156.62,5,10,Audio
+1382,200,Smartphone Samsung,627.41,2,5,Mobile
+1383,204,Montre Apple Watch,364.53,1,0,Wearable
+1384,213,Hub USB,53.39,4,0,Accessoire
+1385,202,Ecouteurs Sony,145.59,1,0,Audio
+1386,214,Tapis de souris XL,22.96,1,10,Accessoire
+1387,202,Ecouteurs Sony,144.1,1,0,Audio
+1388,214,Tapis de souris XL,22.93,3,10,Accessoire
+1389,212,Chargeur USB-C,28.15,3,10,Accessoire
+1390,207,Ecran LG 27,344.04,1,5,Affichage
+1391,212,Chargeur USB-C,30.79,3,15,Accessoire
+1392,213,Hub USB,51.0,1,15,Accessoire
+1393,212,Chargeur USB-C,31.31,4,10,Accessoire
+1394,209,Disque SSD 1TB,125.51,5,10,Stockage
+1395,212,Chargeur USB-C,32.38,4,5,Accessoire
+1396,204,Montre Apple Watch,416.27,1,20,Wearable
+1397,202,Ecouteurs Sony,141.83,5,5,Audio
+1398,209,Disque SSD 1TB,129.87,4,5,Stockage
+1399,200,Smartphone Samsung,574.52,5,15,Mobile
+1400,214,Tapis de souris XL,25.87,5,25,Accessoire
+1401,212,Chargeur USB-C,28.75,3,10,Accessoire
+1402,213,Hub USB,47.7,5,20,Accessoire
+1403,213,Hub USB,54.94,5,0,Accessoire
+1404,204,Montre Apple Watch,409.98,3,10,Wearable
+1405,212,Chargeur USB-C,29.6,1,15,Accessoire
+1406,211,Casque Bose,305.22,2,10,Audio
+1407,206,Souris Razer,57.9,1,10,Peripherique
+1408,211,Casque Bose,316.8,3,20,Audio
+1409,205,Clavier Logitech,87.45,3,15,Peripherique
+1410,209,Disque SSD 1TB,123.15,3,25,Stockage
+1411,204,Montre Apple Watch,420.34,5,5,Wearable
+1412,212,Chargeur USB-C,31.25,1,0,Accessoire
+1413,214,Tapis de souris XL,25.25,1,5,Accessoire
+1414,213,Hub USB,54.99,3,20,Accessoire
+1415,213,Hub USB,46.27,2,5,Accessoire
+1416,210,Webcam Logitech,83.01,4,10,Peripherique
+1417,212,Chargeur USB-C,27.16,1,5,Accessoire
+1418,207,Ecran LG 27,328.94,4,25,Affichage
+1419,200,Smartphone Samsung,609.33,3,5,Mobile
+1420,201,Laptop Dell,1080.98,3,5,Informatique
+1421,214,Tapis de souris XL,22.78,5,0,Accessoire
+1422,212,Chargeur USB-C,29.5,3,20,Accessoire
+1423,200,Smartphone Samsung,604.73,4,0,Mobile
+1424,208,Imprimante HP,197.67,1,5,Informatique
+1425,212,Chargeur USB-C,29.51,4,5,Accessoire
+1426,206,Souris Razer,58.74,5,5,Peripherique
+1427,214,Tapis de souris XL,24.33,2,10,Accessoire
+1428,206,Souris Razer,60.7,4,10,Peripherique
+1429,213,Hub USB,46.13,2,15,Accessoire
+1430,203,Tablette iPad,795.97,5,0,Mobile
+1431,201,Laptop Dell,1110.83,4,0,Informatique
+1432,212,Chargeur USB-C,30.38,1,10,Accessoire
+1433,204,Montre Apple Watch,438.9,1,5,Wearable
+1434,214,Tapis de souris XL,22.86,3,5,Accessoire
+1435,206,Souris Razer,58.45,4,20,Peripherique
+1436,205,Clavier Logitech,97.58,2,15,Peripherique
+1437,202,Ecouteurs Sony,140.89,4,0,Audio
+1438,211,Casque Bose,306.78,1,15,Audio
+1439,214,Tapis de souris XL,22.53,1,5,Accessoire
+1440,213,Hub USB,54.56,5,20,Accessoire
+1441,206,Souris Razer,54.71,2,20,Peripherique
+1442,213,Hub USB,51.08,5,5,Accessoire
+1443,205,Clavier Logitech,97.05,1,5,Peripherique
+1444,203,Tablette iPad,732.51,4,0,Mobile
+1445,214,Tapis de souris XL,23.74,4,5,Accessoire
+1446,202,Ecouteurs Sony,139.51,1,5,Audio
+1447,212,Chargeur USB-C,30.06,1,10,Accessoire
+1448,206,Souris Razer,63.34,1,0,Peripherique
+1449,214,Tapis de souris XL,26.31,1,15,Accessoire
+1450,202,Ecouteurs Sony,135.5,5,0,Audio
+1451,205,Clavier Logitech,90.34,5,25,Peripherique
+1452,202,Ecouteurs Sony,142.7,3,0,Audio
+1453,211,Casque Bose,298.63,2,5,Audio
+1454,212,Chargeur USB-C,30.93,3,10,Accessoire
+1455,212,Chargeur USB-C,28.8,5,15,Accessoire
+1456,209,Disque SSD 1TB,123.86,2,10,Stockage
+1457,212,Chargeur USB-C,28.1,5,10,Accessoire
+1458,202,Ecouteurs Sony,147.99,4,20,Audio
+1459,206,Souris Razer,65.65,3,0,Peripherique
+1460,204,Montre Apple Watch,414.85,1,10,Wearable
+1461,200,Smartphone Samsung,624.12,1,0,Mobile
+1462,206,Souris Razer,54.77,5,20,Peripherique
+1463,210,Webcam Logitech,80.04,4,5,Peripherique
+1464,206,Souris Razer,54.2,3,25,Peripherique
+1465,207,Ecran LG 27,380.62,3,25,Affichage
+1466,211,Casque Bose,284.45,1,10,Audio
+1467,214,Tapis de souris XL,23.72,3,5,Accessoire
+1468,210,Webcam Logitech,86.45,4,10,Peripherique
+1469,207,Ecran LG 27,349.88,3,5,Affichage
+1470,208,Imprimante HP,180.06,5,0,Informatique
+1471,202,Ecouteurs Sony,150.59,2,5,Audio
+1472,205,Clavier Logitech,97.25,4,20,Peripherique
+1473,202,Ecouteurs Sony,149.61,3,0,Audio
+1474,206,Souris Razer,56.57,5,10,Peripherique
+1475,204,Montre Apple Watch,385.9,3,0,Wearable
+1476,202,Ecouteurs Sony,136.85,4,10,Audio
+1477,210,Webcam Logitech,74.59,3,25,Peripherique
+1478,208,Imprimante HP,185.47,1,0,Informatique
+1479,202,Ecouteurs Sony,154.08,3,0,Audio
+1480,205,Clavier Logitech,92.94,1,5,Peripherique
+1481,207,Ecran LG 27,329.88,5,5,Affichage
+1482,209,Disque SSD 1TB,116.87,4,15,Stockage
+1483,214,Tapis de souris XL,27.29,3,0,Accessoire
+1484,205,Clavier Logitech,97.61,4,25,Peripherique
+1485,203,Tablette iPad,857.01,5,0,Mobile
+1486,209,Disque SSD 1TB,118.16,3,0,Stockage
+1487,213,Hub USB,50.09,5,10,Accessoire
+1488,202,Ecouteurs Sony,164.83,1,10,Audio
+1489,201,Laptop Dell,1131.47,2,15,Informatique
+1490,212,Chargeur USB-C,32.28,4,0,Accessoire
+1491,200,Smartphone Samsung,648.68,2,5,Mobile
+1492,202,Ecouteurs Sony,147.09,2,0,Audio
+1493,206,Souris Razer,62.85,4,15,Peripherique
+1494,212,Chargeur USB-C,32.22,2,0,Accessoire
+1495,205,Clavier Logitech,90.67,2,10,Peripherique
+1496,206,Souris Razer,61.87,1,10,Peripherique
+1497,200,Smartphone Samsung,656.92,4,20,Mobile
+1498,210,Webcam Logitech,72.75,3,10,Peripherique
+1499,212,Chargeur USB-C,29.35,1,5,Accessoire
+1500,214,Tapis de souris XL,24.75,4,5,Accessoire
+1501,206,Souris Razer,61.07,3,0,Peripherique
+1502,200,Smartphone Samsung,609.24,4,5,Mobile
+1503,205,Clavier Logitech,94.0,4,20,Peripherique
+1504,204,Montre Apple Watch,426.33,5,25,Wearable
+1505,203,Tablette iPad,875.62,1,15,Mobile
+1506,210,Webcam Logitech,72.3,4,0,Peripherique
+1507,213,Hub USB,54.69,3,25,Accessoire
+1508,213,Hub USB,51.81,1,0,Accessoire
+1509,213,Hub USB,45.86,4,0,Accessoire
+1510,208,Imprimante HP,211.27,2,0,Informatique
+1511,201,Laptop Dell,1246.17,4,15,Informatique
+1512,214,Tapis de souris XL,22.59,5,10,Accessoire
+1513,202,Ecouteurs Sony,156.01,1,10,Audio
+1514,206,Souris Razer,63.54,1,15,Peripherique
+1515,204,Montre Apple Watch,360.9,5,15,Wearable
+1516,200,Smartphone Samsung,628.94,4,5,Mobile
+1517,214,Tapis de souris XL,26.26,1,20,Accessoire
+1518,209,Disque SSD 1TB,110.99,1,25,Stockage
+1519,202,Ecouteurs Sony,144.83,3,0,Audio
+1520,206,Souris Razer,64.94,4,25,Peripherique
+1521,207,Ecran LG 27,340.96,4,10,Affichage
+1522,212,Chargeur USB-C,32.35,5,10,Accessoire
+1523,212,Chargeur USB-C,31.35,2,15,Accessoire
+1524,211,Casque Bose,271.15,4,15,Audio
+1525,208,Imprimante HP,196.18,3,20,Informatique
+1526,200,Smartphone Samsung,552.7,2,25,Mobile
+1527,214,Tapis de souris XL,23.97,4,0,Accessoire
+1528,205,Clavier Logitech,82.07,4,0,Peripherique
+1529,213,Hub USB,47.96,2,25,Accessoire
+1530,202,Ecouteurs Sony,144.57,5,5,Audio
+1531,203,Tablette iPad,725.09,1,5,Mobile
+1532,205,Clavier Logitech,88.72,2,25,Peripherique
+1533,212,Chargeur USB-C,29.29,4,0,Accessoire
+1534,205,Clavier Logitech,96.42,4,0,Peripherique
+1535,213,Hub USB,51.42,3,0,Accessoire
+1536,212,Chargeur USB-C,28.48,5,0,Accessoire
+1537,210,Webcam Logitech,75.43,4,5,Peripherique
+1538,205,Clavier Logitech,89.04,2,25,Peripherique
+1539,204,Montre Apple Watch,363.17,3,10,Wearable
+1540,200,Smartphone Samsung,601.71,2,20,Mobile
+1541,209,Disque SSD 1TB,124.27,2,5,Stockage
+1542,212,Chargeur USB-C,27.94,1,0,Accessoire
+1543,214,Tapis de souris XL,22.62,1,10,Accessoire
+1544,200,Smartphone Samsung,659.81,4,5,Mobile
+1545,212,Chargeur USB-C,30.93,5,0,Accessoire
+1546,214,Tapis de souris XL,23.08,1,10,Accessoire
+1547,204,Montre Apple Watch,417.92,2,0,Wearable
+1548,209,Disque SSD 1TB,127.26,3,25,Stockage
+1549,209,Disque SSD 1TB,129.74,2,0,Stockage
+1550,202,Ecouteurs Sony,146.46,4,10,Audio
+1551,200,Smartphone Samsung,626.29,2,0,Mobile
+1552,205,Clavier Logitech,89.33,5,10,Peripherique
+1553,210,Webcam Logitech,78.54,1,0,Peripherique
+1554,210,Webcam Logitech,84.8,5,15,Peripherique
+1555,200,Smartphone Samsung,585.8,3,5,Mobile
+1556,209,Disque SSD 1TB,126.34,4,0,Stockage
+1557,204,Montre Apple Watch,428.52,3,10,Wearable
+1558,212,Chargeur USB-C,31.99,3,15,Accessoire
+1559,202,Ecouteurs Sony,148.52,4,5,Audio
+1560,204,Montre Apple Watch,414.97,5,0,Wearable
+1561,213,Hub USB,45.09,5,25,Accessoire
+1562,204,Montre Apple Watch,371.82,1,5,Wearable
+1563,209,Disque SSD 1TB,112.25,5,5,Stockage
+1564,202,Ecouteurs Sony,158.04,2,10,Audio
+1565,212,Chargeur USB-C,27.63,4,10,Accessoire
+1566,214,Tapis de souris XL,24.66,5,5,Accessoire
+1567,208,Imprimante HP,187.33,3,0,Informatique
+1568,210,Webcam Logitech,82.85,3,10,Peripherique
+1569,212,Chargeur USB-C,30.43,4,25,Accessoire
+1570,202,Ecouteurs Sony,145.58,5,20,Audio
+1571,210,Webcam Logitech,78.12,1,0,Peripherique
+1572,207,Ecran LG 27,342.63,2,5,Affichage
+1573,211,Casque Bose,301.29,5,5,Audio
+1574,210,Webcam Logitech,77.46,2,10,Peripherique
+1575,209,Disque SSD 1TB,123.61,3,15,Stockage
+1576,205,Clavier Logitech,92.55,2,0,Peripherique
+1577,211,Casque Bose,317.04,5,10,Audio
+1578,203,Tablette iPad,746.13,2,5,Mobile
+1579,209,Disque SSD 1TB,124.85,3,15,Stockage
+1580,205,Clavier Logitech,83.95,4,15,Peripherique
+1581,212,Chargeur USB-C,31.81,1,0,Accessoire
+1582,206,Souris Razer,62.12,5,0,Peripherique
+1583,209,Disque SSD 1TB,130.04,4,0,Stockage
+1584,208,Imprimante HP,215.04,2,25,Informatique
+1585,206,Souris Razer,59.34,2,5,Peripherique
+1586,209,Disque SSD 1TB,125.7,1,20,Stockage
+1587,209,Disque SSD 1TB,116.85,2,5,Stockage
+1588,204,Montre Apple Watch,418.62,2,0,Wearable
+1589,213,Hub USB,47.68,1,10,Accessoire
+1590,205,Clavier Logitech,89.86,4,0,Peripherique
+1591,209,Disque SSD 1TB,129.3,4,5,Stockage
+1592,202,Ecouteurs Sony,142.24,2,15,Audio
+1593,209,Disque SSD 1TB,108.9,5,0,Stockage
+1594,204,Montre Apple Watch,403.22,3,15,Wearable
+1595,202,Ecouteurs Sony,158.52,3,15,Audio
+1596,204,Montre Apple Watch,363.87,3,20,Wearable
+1597,206,Souris Razer,61.97,4,5,Peripherique
+1598,214,Tapis de souris XL,26.86,2,25,Accessoire
+1599,211,Casque Bose,275.35,1,0,Audio
+1600,210,Webcam Logitech,72.97,2,0,Peripherique

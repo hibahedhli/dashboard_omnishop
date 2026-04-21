@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OmniShop — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/dashboard.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">O</div>
+    <span class="logo-text">OmniShop</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-section="overview">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-section="orders">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Commandes</span>
+    </a>
+    <a href="#" class="nav-item" data-section="products">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Produits</span>
+    </a>
+    <a href="#" class="nav-item" data-section="analytics">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Analytiques</span>
+    </a>
+    <a href="#" class="nav-item" data-section="simulator">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Simulateur</span>
+    </a>
+    <a href="#" class="nav-item" data-section="import">
+      <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+      <span>Import / Export</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-avatar">HH</div>
+    <div class="sidebar-user">
+      <span class="user-name">Hiba Hedhli</span>
+      <span class="user-role">Administrateur</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="refreshData()">
+        <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Actualiser
+      </button>
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot"></span> En ligne
+      </div>
+    </div>
+  </header>
+
+  <!-- ── SECTION: OVERVIEW ─────────────────────────────── -->
+  <section class="section active" id="section-overview">
+    <div class="section-header">
+      <h1>Vue d'ensemble</h1>
+      <p>Tableau de bord des performances commerciales en temps réel</p>
+    </div>
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-card" data-color="indigo">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="kpi-body">
+          <span class="kpi-label">CA Total Net</span>
+          <span class="kpi-value" id="kpiCANet">—</span>
+          <span class="kpi-delta positive">+12.4% ce mois</span>
+        </div>
+      </div>
+      <div class="kpi-card" data-color="violet">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg></div>
+        <div class="kpi-body">
+          <span class="kpi-label">Commandes</span>
+          <span class="kpi-value" id="kpiOrders">—</span>
+          <span class="kpi-delta positive">+8 nouvelles</span>
+        </div>
+      </div>
+      <div class="kpi-card" data-color="rose">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+        <div class="kpi-body">
+          <span class="kpi-label">Panier Moyen</span>
+          <span class="kpi-value" id="kpiAvg">—</span>
+          <span class="kpi-delta neutral">Stable</span>
+        </div>
+      </div>
+      <div class="kpi-card" data-color="amber">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="kpi-body">
+          <span class="kpi-label">TVA Collectée</span>
+          <span class="kpi-value" id="kpiTVA">—</span>
+          <span class="kpi-delta">20% sur CA Net</span>
+        </div>
+      </div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card wide">
+        <div class="chart-header">
+          <h3>Évolution Mensuelle</h3>
+          <div class="chart-legend"><span class="legend-dot indigo"></span> CA Net</div>
+        </div>
+        <canvas id="chartMonthly" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><h3>Par Catégorie</h3></div>
+        <canvas id="chartCategories" height="200"></canvas>
+      </div>
+    </div>
+    <div class="best-banner" id="bestBanner">
+      <div class="best-icon">🏆</div>
+      <div class="best-body">
+        <span class="best-label">Meilleur produit</span>
+        <span class="best-name" id="bestName">—</span>
+      </div>
+      <div class="best-value" id="bestValue">—</div>
+    </div>
+  </section>
+
+  <!-- ── SECTION: ORDERS ───────────────────────────────── -->
+  <section class="section" id="section-orders">
+    <div class="section-header">
+      <h1>Commandes</h1>
+      <p>Historique et détail de toutes les transactions</p>
+    </div>
+    <div class="table-toolbar">
+      <input class="search-input" type="text" id="orderSearch" placeholder="Rechercher produit, ID, catégorie…"/>
+      <select class="filter-select" id="orderFilter">
+        <option value="">Toutes catégories</option>
+      </select>
+    </div>
+    <div class="table-card">
+      <table class="data-table" id="ordersTable">
+        <thead>
+          <tr>
+            <th>ID Commande</th><th>ID Produit</th><th>Produit</th><th>Catégorie</th><th>Prix</th>
+            <th>Qté</th><th>Remise</th><th>CA Brut</th><th>CA Net</th><th>TVA</th><th>CA TTC</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </section>
+
+  <!-- ── SECTION: PRODUCTS ─────────────────────────────── -->
+  <section class="section" id="section-products">
+    <div class="section-header">
+      <h1>Produits</h1>
+      <p>Performance par produit et top vendeurs</p>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card wide">
+        <div class="chart-header"><h3>Top 5 Produits — CA Net</h3></div>
+        <canvas id="chartTopProducts" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><h3>CA Brut vs Net</h3></div>
+        <canvas id="chartBrutNet" height="220"></canvas>
+      </div>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+  <!-- ── SECTION: ANALYTICS ────────────────────────────── -->
+  <section class="section" id="section-analytics">
+    <div class="section-header">
+      <h1>Analytiques</h1>
+      <p>Indicateurs financiers avancés</p>
+    </div>
+    <div class="analytics-grid" id="analyticsGrid"></div>
+    <div class="chart-card" style="margin-top:1.5rem;">
+      <div class="chart-header"><h3>Répartition CA par Catégorie (Barre)</h3></div>
+      <canvas id="chartCatBar" height="180"></canvas>
+    </div>
+  </section>
+
+  <!-- ── SECTION: SIMULATOR ────────────────────────────── -->
+  <section class="section" id="section-simulator">
+    <div class="section-header">
+      <h1>Simulateur de Vente</h1>
+      <p>Calculez instantanément CA Brut, Net, TVA pour n'importe quelle transaction</p>
+    </div>
+
+    <!-- Barre de recherche produit — AU DESSUS du layout -->
+    <div class="chart-card" style="margin-bottom:1.5rem; padding:1.25rem 1.5rem;">
+      <div style="display:flex; gap:1rem; align-items:flex-end; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px;">
+          <label style="display:block; font-size:.78rem; color:var(--text-secondary); margin-bottom:.4rem; font-weight:500;">Rechercher un produit (nom ou ID)</label>
+          <input type="text" id="simSearch" placeholder="Ex: Laptop Dell ou 201..." class="form-input" oninput="searchProduct()" style="width:100%"/>
+          <div id="simSuggestions" style="display:none; background:#0d1526; border:1px solid rgba(255,255,255,0.07); border-radius:8px; margin-top:4px; position:absolute; z-index:99; min-width:300px;"></div>
+        </div>
+        <button class="btn btn-primary" onclick="selectProductFromSearch()" style="height:40px; padding:0 1.5rem;">
+          🔍 Analyser ce produit
+        </button>
+      </div>
+    </div>
+
+    <!-- Layout principal simulateur -->
+    <div class="simulator-layout">
+
+      <!-- Colonne gauche : paramètres -->
+      <div class="sim-form-card">
+        <h3>Paramètres</h3>
+        <div class="form-group">
+          <label>Prix unitaire (DT)</label>
+          <input type="number" id="simPrix" value="99.99" step="0.01" min="0" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Quantité</label>
+          <input type="number" id="simQte" value="3" min="1" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Remise (%)</label>
+          <input type="range" id="simRemise" value="10" min="0" max="50" class="form-range"/>
+          <div class="range-labels"><span>0%</span><span id="remiseVal">10%</span><span>50%</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="simulate()">Calculer</button>
+      </div>
+
+      <!-- Colonne centre : KPIs -->
+      <div class="sim-results" id="simResults">
+        <div class="sim-kpi" data-color="indigo">
+          <span class="sim-label">CA Brut</span>
+          <span class="sim-value" id="simCaBrut">—</span>
+        </div>
+        <div class="sim-kpi" data-color="violet">
+          <span class="sim-label">Montant Remise</span>
+          <span class="sim-value" id="simRemiseMnt">—</span>
+        </div>
+        <div class="sim-kpi" data-color="rose">
+          <span class="sim-label">CA Net (HT)</span>
+          <span class="sim-value" id="simCaNet">—</span>
+        </div>
+        <div class="sim-kpi" data-color="amber">
+          <span class="sim-label">TVA 20%</span>
+          <span class="sim-value" id="simTva">—</span>
+        </div>
+        <div class="sim-kpi total" data-color="green">
+          <span class="sim-label">CA TTC</span>
+          <span class="sim-value" id="simCaTtc">—</span>
+        </div>
+      </div>
+
+      <!-- Colonne droite : donut décomposition -->
+      <div class="sim-chart-card">
+        <div class="chart-header"><h3>Décomposition</h3></div>
+        <canvas id="chartSim" height="250"></canvas>
+      </div>
+
+    </div>
+
+    <!-- Graphiques produit — EN DESSOUS du layout, visibles après analyse -->
+    <div id="prodChartsSection" style="display:none; margin-top:1.5rem;">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 id="simChartTitle">Analyse CA du produit</h3>
+        </div>
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:center;">
+          <canvas id="chartProdHistory" height="180"></canvas>
+          <canvas id="chartProdDonut" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION: IMPORT ───────────────────────────────── -->
+  <section class="section" id="section-import">
+    <div class="section-header">
+      <h1>Import / Export</h1>
+      <p>Gérer les fichiers de données</p>
+    </div>
+    <div class="import-grid">
+      <div class="import-card">
+        <div class="import-icon">⬆️</div>
+        <h3>Importer un CSV</h3>
+        <p>Chargez votre propre fichier ventes.csv</p>
+        <input type="file" id="csvUpload" accept=".csv" style="display:none"/>
+        <button class="btn btn-primary" onclick="document.getElementById('csvUpload').click()">Choisir un fichier</button>
+        <div class="upload-hint">Format : ID_Commande, ID_Produit, Produit, Prix, Quantite, Remise, Categorie</div>
+      </div>
+      <div class="import-card">
+        <div class="import-icon">🎲</div>
+        <h3>Générer des données</h3>
+        <p>Créer un jeu de données aléatoire</p>
+        <div class="gen-row">
+          <input type="number" id="genN" value="2000" min="100" max="5000" class="form-input small"/>
+          <span>lignes</span>
+        </div>
+        <button class="btn btn-primary" onclick="generateData()">Générer</button>
+      </div>
+      <div class="import-card">
+        <div class="import-icon">⬇️</div>
+        <h3>Télécharger résultats</h3>
+        <p>Exporter resultats_final.csv</p>
+        <a class="btn btn-primary" href="/data/resultats_final.csv" download>Télécharger CSV</a>
+      </div>
+    </div>
+    <div id="importStatus" class="import-status"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
