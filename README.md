@@ -1,17 +1,28 @@
 # OmniShop — Dashboard d'Automatisation des Ventes
 
-> Projet de Fin d'Année · Matière : Logiciels · Auteur : Imene Amira
-
-Dashboard web complet pour l'analyse automatisée des ventes e-commerce, inspiré de la plateforme Converty.
+> Projet de Fin d'Année · Matière : Logiciels · Faculté des Sciences de Tunis
 
 ---
 
-## Stack Technologique
+## 1. Titre & Description
+
+**OmniShop** est un dashboard web complet pour l'analyse automatisée des ventes d'une entreprise e-commerce.
+
+L'application remplace un fichier Excel classique devenu trop volumineux par un système d'analyse dynamique capable de :
+
+- Générer et importer des fichiers CSV de ventes
+- Calculer automatiquement le **CA Brut**, le **CA Net** et la **TVA (20%)**
+- Identifier le **meilleur produit** par chiffre d'affaires
+- Afficher des **graphiques interactifs** par produit, catégorie et mois
+- Simuler n'importe quelle transaction en temps réel
+- Exporter les résultats dans un fichier `resultats_final.csv`
+
+### Stack Technologique
 
 | Couche | Technologie |
 |--------|-------------|
-| Backend | **Python 3.10+** · Flask |
-| Analyse données | **Python** · CSV stdlib · pandas (optionnel) |
+| Backend | **Python 3.13** · Flask |
+| Analyse données | **Python** · module CSV natif |
 | Visualisation Python | **Matplotlib** |
 | Frontend | **HTML5 · CSS3 · JavaScript ES2022** |
 | Graphiques web | **Chart.js 4** |
@@ -19,127 +30,152 @@ Dashboard web complet pour l'analyse automatisée des ventes e-commerce, inspir�
 
 ---
 
-## Structure du projet
+## 2. Prérequis
 
-```
-ventes_dashboard/
-├── app.py                    # Serveur Flask (routes API + rendu)
-├── requirements.txt          # Dépendances Python
-├── .venv/                    # Environnement virtuel (créé automatiquement)
-├── data/
-│   ├── ventes.csv            # Données générées ou importées
-│   └── resultats_final.csv   # Export avec colonnes calculées
-├── scripts/
-│   ├── generate_data.py      # Génération de données aléatoires
-│   ├── analytics.py          # Moteur de calcul (CA Brut, CA Net, TVA…)
-│   └── charts.py             # Graphiques Matplotlib (PNG)
-├── templates/
-│   └── index.html            # Dashboard HTML unique (SPA)
-└── static/
-    ├── css/dashboard.css     # Thème dark Converty-style
-    ├── js/dashboard.js       # Logique frontend (Chart.js, API calls)
-    └── images/               # Graphiques Matplotlib générés
-```
+Avant de lancer le projet, assurez-vous d'avoir installé :
+
+| Logiciel | Version minimale | Lien |
+|----------|-----------------|------|
+| **Python** | 3.10 ou plus | https://www.python.org/downloads/ |
+| **VS Code** | Dernière version | https://code.visualstudio.com/ |
+| **Extension Python** pour VS Code | — | Installer depuis VS Code Extensions |
+| **Navigateur web** | Chrome, Edge ou Firefox | — |
+
+> Node.js n'est **pas** nécessaire pour ce projet.
 
 ---
 
-## Installation rapide
+## 3. Installation
+
+### Étape 1 — Télécharger le projet
+
+Décompresser le fichier `ventes_dashboard.zip` dans un dossier de votre choix.
+
+### Étape 2 — Ouvrir dans VS Code
+
+```
+Fichier → Ouvrir le dossier → sélectionner ventes_dashboard
+```
+
+### Étape 3 — Ouvrir le terminal
+
+```
+Ctrl + ù
+```
+
+### Étape 4 — Se placer dans le bon dossier
 
 ```bash
-# 1. Cloner / décompresser le projet
 cd ventes_dashboard
+```
 
-# 2. Créer l'environnement virtuel
-python -m venv .venv
+### Étape 5 — Créer l'environnement virtuel
 
-# 3. Activer l'environnement
-# Windows :
+```bash
+python -m venv .venv --without-pip
+```
+
+### Étape 6 — Activer l'environnement virtuel
+
+**Windows :**
+```bash
 .venv\Scripts\activate
-# macOS / Linux :
+```
+
+**Mac / Linux :**
+```bash
 source .venv/bin/activate
+```
 
-# 4. Installer les dépendances
+Le terminal affiche `(.venv)` — l'environnement est actif
+
+### Étape 7 — Installer pip
+
+```bash
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+```
+
+### Étape 8 — Installer les dépendances
+
+```bash
 pip install -r requirements.txt
+```
 
-# 5. Lancer le serveur
+Dépendances installées :
+
+| Package | Version | Rôle |
+|---------|---------|------|
+| Flask | 3.1.x | Serveur web |
+| matplotlib | 3.10.x | Graphiques Python |
+| Werkzeug | 3.1.x | Utilitaires Flask |
+
+---
+
+## 4. Utilisation
+
+### Lancer le projet
+
+```bash
 python app.py
 ```
 
-Ouvrez ensuite **http://localhost:5000** dans votre navigateur.
-
----
-
-## Fonctionnalités
-
-### 📊 Vue d'ensemble
-- KPI en temps réel : CA Net, nombre de commandes, panier moyen, TVA collectée
-- Graphique d'évolution mensuelle (Chart.js)
-- Répartition par catégorie (donut)
-- Badge du meilleur produit
-
-### 📦 Commandes
-- Tableau paginé de toutes les transactions
-- Recherche en temps réel (produit, ID, catégorie)
-- Filtrage par catégorie
-- Colonnes : CA Brut, CA Net, TVA, CA TTC
-
-### 🖥️ Produits
-- Top 5 produits (bar chart horizontal)
-- Comparatif CA Brut vs Net vs TVA
-- Grille de performance avec barres de progression
-
-### 📈 Analytiques
-- 8 indicateurs financiers clés
-- Taux Net/Brut (efficacité des remises)
-- Graphique catégories en barres
-
-### ⚡ Simulateur
-- Calcul instantané pour n'importe quelle transaction
-- Curseur de remise interactif (0–50%)
-- Décomposition visuelle en donut (CA Net / Remise / TVA)
-
-### ⬆️ Import / Export
-- Import de CSV personnalisé (lecture dynamique)
-- Génération aléatoire (5 à 500 lignes)
-- Téléchargement de `resultats_final.csv`
-
----
-
-## Formules de calcul
-
+Le terminal affiche :
 ```
-CA Brut   = Prix × Quantité
-CA Net    = CA Brut × (1 − Remise / 100)
-TVA       = CA Net × 0.20
-CA TTC    = CA Net + TVA
+Running on http://127.0.0.1:5000
 ```
 
----
+### Ouvrir le dashboard
 
-## Format CSV attendu
+Ouvrir un navigateur et aller sur :
+```
+http://localhost:5000
+```
+
+### Sections disponibles
+
+| Section | Description |
+|---------|-------------|
+| **Dashboard** | Vue d'ensemble — KPIs, graphiques mensuels, meilleur produit |
+| **Commandes** | Tableau paginé avec recherche et filtre par catégorie |
+| **Produits** | Top 5 produits, CA Brut vs Net, grille de performance |
+| **Analytiques** | Indicateurs financiers avancés, répartition par catégorie |
+| **Simulateur** | Calcul instantané CA Brut/Net/TVA + analyse graphique par produit |
+| **Import / Export** | Importer CSV, générer des données, télécharger les résultats |
+
+### Formules de calcul
+
+```
+CA Brut  = Prix x Quantite
+CA Net   = CA Brut x (1 - Remise / 100)
+TVA      = CA Net x 0.20
+CA TTC   = CA Net + TVA
+```
+
+### Format CSV pour l'import
 
 ```csv
-ID,Produit,Prix,Quantite,Remise,Categorie
-101,Smartphone Samsung,599.99,2,10,Mobile
-102,Laptop Dell,1199.99,1,5,Informatique
+ID_Commande,ID_Produit,Produit,Prix,Quantite,Remise,Categorie
+1001,201,Laptop Dell,3799.00,1,5,Informatique
+1002,213,Chargeur USB-C,89.00,3,0,Accessoire
 ```
 
-Le champ `Produit` et `Categorie` sont optionnels — le script fonctionne aussi avec le format minimal `ID,Prix,Quantite,Remise`.
+Le separateur doit etre une virgule et les decimales un point.
+
+### Arrêter le serveur
+
+```
+Ctrl + C
+```
 
 ---
 
-## API REST
+## 5. Auteurs
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/summary` | Résumé global (KPIs, catégories, top5…) |
-| GET | `/api/orders?page=1&search=` | Liste paginée des commandes |
-| POST | `/api/simulate` | Simulation d'une vente |
-| POST | `/api/generate` | Génère N lignes aléatoires |
-| POST | `/api/upload` | Importe un CSV |
+| Nom | Role |
+|-----|------|
+| **Hiba Hedhli** | Developpement complet du projet |
 
 ---
 
-## Licence
-
-Projet académique — Faculté des Sciences de Tunis
+*Faculte des Sciences de Tunis — Projet de Fin d'Annee 2025/2026*
