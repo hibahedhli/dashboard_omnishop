@@ -49,12 +49,12 @@ Avant de lancer le projet, assurez-vous d'avoir installé :
 
 ### Étape 1 — Télécharger le projet
 
-Décompresser le fichier `dashboard_ventes_ecom-main.zip` dans un dossier de votre choix.
+Décompresser le fichier `dashboard_omnishop-main.zip` dans un dossier de votre choix.
 
 ### Étape 2 — Ouvrir dans VS Code
 
 ```
-Fichier → Ouvrir le dossier → sélectionner dashboard_ventes_ecom-main
+Fichier → Ouvrir le dossier → sélectionner dashboard_omnishop-main
 ```
 
 ### Étape 3 — Ouvrir le terminal
@@ -66,7 +66,7 @@ Ctrl + ù
 ### Étape 4 — Se placer dans le bon dossier
 
 ```bash
-cd dashboard_ventes_ecom-main
+cd dashboard_omnishop-main
 ```
 
 ### Étape 5 — Créer l'environnement virtuel
@@ -106,9 +106,9 @@ Dépendances installées :
 
 | Package | Version | Rôle |
 |---------|---------|------|
-| Flask | 3.1.x | Serveur web |
-| matplotlib | 3.10.x | Graphiques Python |
-| Werkzeug | 3.1.x | Utilitaires Flask |
+| Flask | 3.1.0 | Serveur web |
+| matplotlib | 3.9.0 | Graphiques Python |
+| Werkzeug | 3.1.3 | Utilitaires Flask |
 
 ---
 
@@ -172,9 +172,10 @@ Ctrl + C
 
 ## 5. Auteurs
 
-| Nom | Role |
-|-----|------|
-| **Hiba Hedhli** | Developpement complet du projet |
+- Hiba Hedhli 
+- Emna Jerbi
+- Lynda ben hamza 
+- shayma benzarti
 
 ---
 
