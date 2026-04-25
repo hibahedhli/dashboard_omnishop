@@ -262,11 +262,11 @@ async function loadOrders() {
   const data = await res.json();
   renderOrdersTable(data);
   renderPagination(data.total);
-  populateCategoryFilter(data);
+  populateCategoryFilter();
 }
  
 function renderOrdersTable(data) {
-  const BADGE_MAP = { Mobile:'indigo', Informatique:'violet', Audio:'rose', Wearable:'amber', Périphérique:'green', Stockage:'indigo', Affichage:'violet', Accessoire:'amber', Autre:'rose' };
+  const BADGE_MAP = { Mobile:'indigo', Informatique:'violet', Audio:'rose', Wearable:'amber', 'Périphérique':'green', Peripherique:'green', Stockage:'indigo', Affichage:'violet', Accessoire:'amber', Autre:'rose' };
   const tbody = document.getElementById('ordersBody');
   tbody.innerHTML = data.rows.map(r => `
     <tr>
@@ -300,21 +300,22 @@ function gotoPage(p) { ordersPage = p; loadOrders(); }
 function setupOrderSearch() {
   const inp = document.getElementById('orderSearch');
   inp?.addEventListener('input', debounce(() => { ordersPage = 1; loadOrders(); }, 300));
-  
   const sel = document.getElementById('orderFilter');
   sel?.addEventListener('change', () => { ordersPage = 1; loadOrders(); });
 }
  
-function populateCategoryFilter(data) {
+async function populateCategoryFilter() {
   const sel = document.getElementById('orderFilter');
-  if (sel && sel.options.length <= 1) {
-    const cats = [...new Set(data.rows.map(r => r.Categorie).filter(Boolean))];
+  if (!sel || sel.options.length > 1) return;
+  try {
+    const res = await fetch('/api/categories');
+    const cats = await res.json();
     cats.forEach(c => {
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       sel.appendChild(opt);
     });
-  }
+  } catch(e) {}
 }
  
 // ─── Simulator ───────────────────────────────────────────────────
@@ -540,7 +541,13 @@ function selectProduct(name) {
 
   // Afficher la section graphiques
   const section = document.getElementById('prodChartsSection');
-  if (section) section.style.display = 'block';
+  if (section) {
+    section.style.display = 'block';
+    setTimeout(() => {
+      if (window.chartProdHist) window.chartProdHist.resize();
+      if (window.chartProdDonutInst) window.chartProdDonutInst.resize();
+    }, 100);
+  }
   const titleEl = document.getElementById('simChartTitle');
   if (titleEl) titleEl.textContent = 'Analyse CA — ' + name;
 
@@ -568,6 +575,7 @@ function selectProduct(name) {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: true, labels: { color: '#94a3b8', font: { size: 11 } } },
           tooltip: tooltipStyle()
@@ -592,6 +600,7 @@ function selectProduct(name) {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         cutout: '60%',
         plugins: {
           legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 }, padding: 8 } },
@@ -610,4 +619,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const style = document.createElement('style');
   style.textContent = '.mono { font-family: var(--mono); font-size: .78rem; }';
   document.head.appendChild(style);
+
+
 });
+
+
+async function loadMatplotlibChart() {
+  const query = document.getElementById('mplSearch').value.trim();
+  if (!query) { showToast('Entrez un nom de produit', 'error'); return; }
+
+  // Chercher le nom exact
+  let name = Object.keys(summaryData.by_product || {})
+    .find(p => p.toLowerCase() === query.toLowerCase());
+
+  if (!name) {
+    name = Object.keys(summaryData.by_product || {})
+      .find(p => p.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  if (!name) {
+    // Chercher par ID produit
+    const row = (summaryData.rows || [])
+      .find(r => String(r.ID_Produit || '') === query);
+    if (row) name = row.Produit;
+  }
+
+  if (!name) { showToast('Produit non trouvé', 'error'); return; }
+
+  const container = document.getElementById('mplChartContainer');
+  container.innerHTML = '<p style="color:var(--text-secondary)">⏳ Génération du graphique...</p>';
+
+  const res = await fetch(`/api/chart_product?name=${encodeURIComponent(name)}`);
+  const data = await res.json();
+
+  if (data.error) {
+    container.innerHTML = `<p style="color:#f43f5e">${data.error}</p>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="color:#a5b4fc; margin-bottom:.75rem; font-weight:600">${name}</p>
+    <img src="${data.image_url}?t=${Date.now()}" style="width:100%; border-radius:10px;" alt="Graphique ${name}"/>
+  `;
+}
+

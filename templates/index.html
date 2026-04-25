@@ -178,6 +178,16 @@
       </div>
     </div>
     <div class="products-grid" id="productsGrid"></div>
+    <div class="chart-card" style="margin-top:1.5rem;">
+      <div class="chart-header"><h3>Graphique Matplotlib par Produit</h3></div>
+      <div style="display:flex; gap:1rem; margin-bottom:1rem; align-items:center;">
+        <input type="text" id="mplSearch" placeholder="Nom ou ID produit..." class="search-input" style="max-width:400px"/>
+        <button class="btn btn-primary" onclick="loadMatplotlibChart()">📊 Générer graphique</button>
+      </div>
+      <div id="mplChartContainer" style="text-align:center; color:var(--text-secondary); padding:2rem;">
+        Entrez un nom de produit et cliquez Générer
+      </div>
+    </div>
   </section>
 
   <!-- ── SECTION: ANALYTICS ────────────────────────────── -->
@@ -275,8 +285,12 @@
           <h3 id="simChartTitle">Analyse CA du produit</h3>
         </div>
         <div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:center;">
-          <canvas id="chartProdHistory" height="180"></canvas>
-          <canvas id="chartProdDonut" height="180"></canvas>
+          <div style="position:relative; height:200px;">
+            <canvas id="chartProdHistory"></canvas>
+          </div>
+          <div style="position:relative; height:200px;">
+            <canvas id="chartProdDonut"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -322,5 +336,13 @@
 
 <div class="toast" id="toast"></div>
 <script src="/static/js/dashboard.js"></script>
+<div style="
+  position:fixed; bottom:1rem; left:50%; transform:translateX(-50%);
+  background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3);
+  padding:.4rem 1.2rem; border-radius:99px;
+  font-size:.72rem; color:#a5b4fc; font-family:var(--font);
+  pointer-events:none; z-index:999;">
+  © 2026 OmniShop — Hiba Hedhli · Faculté des Sciences de Tunis
+</div>
 </body>
 </html>

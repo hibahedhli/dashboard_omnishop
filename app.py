@@ -1,15 +1,13 @@
 """
-app.py  –  Serveur Flask pour le dashboard VentesIQ
+app.py  -  Serveur Flask pour le dashboard OmniShop
 """
 
-import json
 import os
 import sys
 from pathlib import Path
 
 from flask import Flask, jsonify, render_template, request, send_from_directory
 
-# Ajouter scripts/ au path
 sys.path.insert(0, str(Path(__file__).parent / "scripts"))
 from generate_data import generate_ventes
 from analytics import run_full_analysis, load_csv, compute_metrics, export_results, get_summary
@@ -37,8 +35,6 @@ def get_analysis(force=False):
     return _cache
 
 
-# ─── Routes ──────────────────────────────────────────────────────────────────
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -47,8 +43,7 @@ def index():
 @app.route("/api/summary")
 def api_summary():
     summary = get_analysis()
-    safe = {k: v for k, v in summary.items()}
-    return jsonify(safe)
+    return jsonify(summary)
 
 
 @app.route("/api/orders")
@@ -56,27 +51,38 @@ def api_orders():
     summary = get_analysis()
     page = int(request.args.get("page", 1))
     per_page = int(request.args.get("per_page", 10))
-    search = request.args.get("search", "").lower()
-    rows = summary["rows"]
-    category = request.args.get("category", "")
+    search = request.args.get("search", "").lower().strip()
+    category = request.args.get("category", "").strip()
+    rows = list(summary["rows"])
+
     if search:
-        rows = [r for r in rows if search in str(r.get("Produit", "")).lower()
-                or search in str(r.get("ID", "")).lower()
-                or search in str(r.get("Categorie", "")).lower()]
+        rows = [r for r in rows if
+                search in str(r.get("Produit", "")).lower() or
+                search in str(r.get("ID_Commande", "")).lower() or
+                search in str(r.get("ID_Produit", "")).lower() or
+                search in str(r.get("ID", "")).lower() or
+                search in str(r.get("Categorie", "")).lower()]
+
     if category:
         rows = [r for r in rows if r.get("Categorie", "") == category]
+
     total = len(rows)
     start = (page - 1) * per_page
     paginated = rows[start:start + per_page]
     return jsonify({"rows": paginated, "total": total, "page": page, "per_page": per_page})
 
 
+@app.route("/api/categories")
+def api_categories():
+    summary = get_analysis()
+    cats = sorted(set(r.get("Categorie", "") for r in summary["rows"] if r.get("Categorie")))
+    return jsonify(cats)
+
+
 @app.route("/api/generate", methods=["POST"])
 def api_generate():
-    """Génère un nouveau dataset."""
     data = request.get_json() or {}
-    n = int(data.get("n", 50))
-    n = max(5, min(n, 5000))
+    n = max(5, min(int(data.get("n", 50)), 5000))
     generate_ventes(str(VENTES_CSV), n)
     summary = get_analysis(force=True)
     generate_all_charts(summary)
@@ -85,7 +91,6 @@ def api_generate():
 
 @app.route("/api/upload", methods=["POST"])
 def api_upload():
-    """Upload un CSV personnalisé."""
     if "file" not in request.files:
         return jsonify({"error": "No file"}), 400
     f = request.files["file"]
@@ -99,7 +104,6 @@ def api_upload():
 
 @app.route("/api/simulate", methods=["POST"])
 def api_simulate():
-    """Simule une vente unique et retourne ses métriques."""
     data = request.get_json() or {}
     try:
         prix = float(data["prix"])
@@ -107,7 +111,6 @@ def api_simulate():
         remise = float(data.get("remise", 0))
     except (KeyError, ValueError) as e:
         return jsonify({"error": str(e)}), 400
-
     ca_brut = round(prix * quantite, 2)
     ca_net = round(ca_brut * (1 - remise / 100), 2)
     tva = round(ca_net * 0.20, 2)
@@ -125,9 +128,23 @@ def api_simulate():
 def serve_chart(filename):
     return send_from_directory("static/images", filename)
 
+
 @app.route("/data/<path:filename>")
 def serve_data(filename):
     return send_from_directory("data", filename)
+
+@app.route("/api/chart_product")
+def api_chart_product():
+    from charts import chart_ca_single_product
+    name = request.args.get("name", "")
+    if not name:
+        return jsonify({"error": "name required"}), 400
+    summary = get_analysis()
+    path = chart_ca_single_product(name, summary)
+    if not path:
+        return jsonify({"error": "Produit non trouvé"}), 404
+    filename = path.replace("static/images/", "")
+    return jsonify({"image_url": f"/static/images/{filename}"})
 
 
 if __name__ == "__main__":

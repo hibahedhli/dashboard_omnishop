@@ -123,3 +123,64 @@ def generate_all_charts(summary: Dict[str, Any]) -> Dict[str, str]:
     }
     print("✅ Graphiques générés :", list(paths.values()))
     return paths
+
+
+def chart_ca_single_product(product_name: str, summary: Dict[str, Any]) -> str:
+    ensure_dir()
+    
+    rows = [r for r in summary.get("rows", []) if r.get("Produit") == product_name]
+    if not rows:
+        return ""
+    
+    total_ca_brut = sum(float(r["CA_Brut"]) for r in rows)
+    total_ca_net  = sum(float(r["CA_Net"]) for r in rows)
+    total_tva     = sum(float(r["TVA"]) for r in rows)
+    total_ca_ttc  = sum(float(r["CA_TTC"]) for r in rows)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig.patch.set_facecolor("#0f172a")
+
+    # Graphique 1 : barres CA Brut vs CA Net vs TVA vs TTC
+    ax1.set_facecolor("#1e293b")
+    labels = ["CA Brut", "CA Net", "TVA", "CA TTC"]
+    values = [total_ca_brut, total_ca_net, total_tva, total_ca_ttc]
+    colors = ["#8b5cf6", "#6366f1", "#f59e0b", "#10b981"]
+    bars = ax1.bar(labels, values, color=colors, edgecolor="none", width=0.5)
+    for bar, val in zip(bars, values):
+        ax1.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.01,
+                f"{val:,.0f} DT", ha="center", va="bottom", color="white", fontsize=9, fontweight="bold")
+    ax1.set_title(f"CA Total — {product_name}", color="white", fontsize=12, fontweight="bold", pad=15)
+    ax1.set_ylabel("Montant (DT)", color="#94a3b8", fontsize=10)
+    ax1.tick_params(colors="#94a3b8")
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.spines["left"].set_edgecolor("#334155")
+    ax1.spines["bottom"].set_edgecolor("#334155")
+
+    # Graphique 2 : camembert répartition
+    ax2.set_facecolor("#0f172a")
+    remise = total_ca_brut - total_ca_net
+    wedges, _, autotexts = ax2.pie(
+        [total_ca_net, remise, total_tva],
+        labels=None,
+        autopct="%1.1f%%",
+        colors=["#6366f1", "#f43f5e", "#f59e0b"],
+        startangle=140,
+        wedgeprops={"edgecolor": "#0f172a", "linewidth": 2},
+        pctdistance=0.75
+    )
+    for at in autotexts:
+        at.set_color("white")
+        at.set_fontsize(9)
+        at.set_fontweight("bold")
+    ax2.legend(wedges, ["CA Net", "Remise", "TVA"],
+               loc="lower center", bbox_to_anchor=(0.5, -0.12),
+               ncol=3, fontsize=8, frameon=False, labelcolor="#cbd5e1")
+    ax2.set_title(f"Répartition — {product_name}", color="white", fontsize=12, fontweight="bold", pad=15)
+
+    plt.tight_layout()
+    safe_name = product_name.replace(" ", "_").replace("/", "_")
+    path = f"{OUTPUT_DIR}/chart_prod_{safe_name}.png"
+    fig.savefig(path, dpi=120, bbox_inches="tight", facecolor=fig.get_facecolor())
+    plt.close(fig)
+    return path
