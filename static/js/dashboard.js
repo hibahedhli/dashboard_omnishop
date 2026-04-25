@@ -289,9 +289,25 @@ function renderPagination(total) {
   const pages = Math.ceil(total / PER_PAGE);
   const pag = document.getElementById('pagination');
   let html = '';
-  for (let i = 1; i <= Math.min(pages, 7); i++) {
+
+  const delta = 2;
+  const left = Math.max(1, ordersPage - delta);
+  const right = Math.min(pages, ordersPage + delta);
+
+  if (left > 1) {
+    html += `<button class="page-btn" onclick="gotoPage(1)">1</button>`;
+    if (left > 2) html += `<span style="color:var(--text-muted);padding:0 .3rem">…</span>`;
+  }
+
+  for (let i = left; i <= right; i++) {
     html += `<button class="page-btn ${i===ordersPage?'active':''}" onclick="gotoPage(${i})">${i}</button>`;
   }
+
+  if (right < pages) {
+    if (right < pages - 1) html += `<span style="color:var(--text-muted);padding:0 .3rem">…</span>`;
+    html += `<button class="page-btn" onclick="gotoPage(${pages})">${pages}</button>`;
+  }
+
   pag.innerHTML = html;
 }
  
