@@ -195,7 +195,7 @@ function renderProducts() {
   const grid = document.getElementById('productsGrid');
   if (grid) {
     const allProds = Object.entries(summaryData.by_product)
-      .sort((a,b) => b[1]-a[1]).slice(0,12);
+      .sort((a,b) => b[1]-a[1]).slice(0,10);
     grid.innerHTML = allProds.map(([name, ca], i) => `
       <div class="product-card">
         <div class="product-rank">#${i+1}</div>
