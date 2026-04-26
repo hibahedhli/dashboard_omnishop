@@ -568,9 +568,18 @@ function selectProduct(name) {
   if (titleEl) titleEl.textContent = 'Analyse CA — ' + name;
 
   // Données
-  const labels = rows.map((_, i) => 'Cmd ' + (i + 1));
-  const caBrutVals = rows.map(r => parseFloat(r.CA_Brut));
-  const caNetVals  = rows.map(r => parseFloat(r.CA_Net));
+ // Grouper par mois
+  const months = ["Jan","Fev","Mar","Avr","Mai","Jun","Jul","Aou","Sep","Oct","Nov","Dec"];
+  const monthlyBrut = {};
+  const monthlyNet = {};
+  rows.forEach((r, i) => {
+    const m = months[i % 12];
+    monthlyBrut[m] = (monthlyBrut[m] || 0) + parseFloat(r.CA_Brut);
+    monthlyNet[m]  = (monthlyNet[m]  || 0) + parseFloat(r.CA_Net);
+  });
+  const labels    = Object.keys(monthlyBrut);
+  const caBrutVals = Object.values(monthlyBrut).map(v => Math.round(v));
+  const caNetVals  = Object.values(monthlyNet).map(v => Math.round(v));
   const totalCaBrut = caBrutVals.reduce((a, b) => a + b, 0);
   const totalCaNet  = caNetVals.reduce((a, b) => a + b, 0);
   const totalTva    = rows.reduce((s, r) => s + parseFloat(r.TVA), 0);
