@@ -175,7 +175,6 @@ Ctrl + C
 - Hiba Hedhli 
 - Emna Jerbi
 - Lynda ben hamza 
-- shayma benzarti
 
 ---
 
