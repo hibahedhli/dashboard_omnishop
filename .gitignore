@@ -1,6 +1,4 @@
 .venv/
-data/ventes.csv
-data/resultats_final.csv
 static/images/
 __pycache__/
 scripts/__pycache__/
