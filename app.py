@@ -56,12 +56,13 @@ def api_orders():
     rows = list(summary["rows"])
 
     if search:
+        search_clean = search.lstrip('#')
         rows = [r for r in rows if
-                search in str(r.get("Produit", "")).lower() or
-                search in str(r.get("ID_Commande", "")).lower() or
-                search in str(r.get("ID_Produit", "")).lower() or
-                search in str(r.get("ID", "")).lower() or
-                search in str(r.get("Categorie", "")).lower()]
+                search_clean in str(r.get("Produit", "")).lower() or
+                search_clean == str(r.get("ID_Commande", "")).strip() or
+                search_clean == str(r.get("ID_Produit", "")).strip() or
+                search_clean == str(r.get("ID", "")).strip() or
+                search_clean in str(r.get("Categorie", "")).lower()]
 
     if category:
         rows = [r for r in rows if r.get("Categorie", "") == category]
