@@ -173,8 +173,6 @@ Ctrl + C
 ## 5. Auteurs
 
 - Hiba Hedhli 
-- Emna Jerbi
-- Lynda ben hamza 
 
 ---
 

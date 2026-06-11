@@ -22,9 +22,11 @@ def ensure_dir():
 
 def chart_ca_by_product(summary: Dict[str, Any]) -> str:
     ensure_dir()
-    top5 = sorted(summary["by_product"].items(), key=lambda x: x[1], reverse=True)[:15]
-    names = [t[0][:15] + "…" if len(t[0]) > 15 else t[0] for t in top5]
-    values = [t[1] for t in top5]
+    top5 = summary.get("top5_orders", [])
+    if not top5:
+        return ""
+    names = [f"Cmd #{o.get('ID_Commande', i+1)}" for i, o in enumerate(top5)]
+    values = [float(o["CA_Net"]) for o in top5]
 
     fig, ax = plt.subplots(figsize=(8, 4))
     fig.patch.set_facecolor("#0f172a")
@@ -36,7 +38,7 @@ def chart_ca_by_product(summary: Dict[str, Any]) -> str:
                 f"{val:,.0f}DT", va="center", ha="left", color="white", fontsize=9, fontweight="bold")
 
     ax.set_xlabel("CA Net (DT)", color="#94a3b8", fontsize=10)
-    ax.set_title("Top 5 Produits par CA Net", color="white", fontsize=13, fontweight="bold", pad=15)
+    ax.set_title("Top 5 Commandes par CA Net", color="white", fontsize=13, fontweight="bold", pad=15)
     ax.tick_params(colors="#94a3b8")
     ax.spines[:].set_visible(False)
     ax.xaxis.label.set_color("#94a3b8")

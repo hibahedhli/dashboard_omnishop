@@ -58,8 +58,8 @@ function renderOverview() {
   animateValue('kpiAvg', 0, s.avg_order, 'DT');
   animateValue('kpiTVA', 0, s.tva_total, 'DT');
  
-  document.getElementById('bestName').textContent = `${s.best_product_name} (ID Produit : #${s.best_product_id})`;
-  document.getElementById('bestValue').textContent = fmt(s.best_product_ca);
+  document.getElementById('bestName').textContent = `Commande #${s.best_order_id}`;
+  document.getElementById('bestValue').textContent = fmt(s.best_order_ca);
  
   renderChartMonthly();
   renderChartCategories();
@@ -143,36 +143,41 @@ function renderChartCategories() {
 // ─── Products ────────────────────────────────────────────────────
 function renderProducts() {
   if (!summaryData) return;
-  const top5 = summaryData.top5_products;
-  const maxVal = top5[0]?.[1] || 1;
- 
-  // Top products bar chart
+
+  // UTILISE LES COMMANDES
+  const top5 = summaryData.top5_orders || [];
+  const maxVal = top5[0]?.CA_Net || 1;
+
+  // ─── Graphique Top commandes ───
   const ctx = document.getElementById('chartTopProducts');
   if (ctx) {
     if (chartTop) chartTop.destroy();
+
     chartTop = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: top5.map(t => t[0].length > 18 ? t[0].substring(0,18)+'…' : t[0]),
+        labels: top5.map(o => `#${o.ID_Commande}`),
         datasets: [{
-          data: top5.map(t => t[1]),
-          backgroundColor: PALETTE.slice(0,5),
+          data: top5.map(o => o.CA_Net),
+          backgroundColor: PALETTE.slice(0, 5),
           borderRadius: 8,
           borderSkipped: false,
         }]
       },
       options: {
-        indexAxis: 'y', responsive: true,
+        indexAxis: 'y',
+        responsive: true,
         plugins: { legend: { display: false }, tooltip: tooltipStyle() },
         scales: { x: axisStyle(), y: axisStyle() }
       }
     });
   }
- 
-  // Brut vs Net
+
+  // ─── Brut vs Net ───
   const ctx2 = document.getElementById('chartBrutNet');
   if (ctx2 && summaryData) {
     if (chartBrutNet) chartBrutNet.destroy();
+
     chartBrutNet = new Chart(ctx2, {
       type: 'bar',
       data: {
@@ -180,28 +185,32 @@ function renderProducts() {
         datasets: [{
           data: [summaryData.ca_brut_total, summaryData.ca_total, summaryData.tva_total],
           backgroundColor: ['#6366f1','#8b5cf6','#f59e0b'],
-          borderRadius: 8, borderSkipped: false,
+          borderRadius: 8,
+          borderSkipped: false,
         }]
       },
       options: {
         responsive: true,
         plugins: { legend: { display: false }, tooltip: tooltipStyle() },
-        scales: { x: axisStyle(), y: { ...axisStyle(), ticks: { ...axisStyle().ticks, callback: v => (v/1000).toFixed(0)+'kDT' } } }
+        scales: {
+          x: axisStyle(),
+          y: { ...axisStyle(), ticks: { ...axisStyle().ticks, callback: v => (v/1000).toFixed(0)+'kDT' } }
+        }
       }
     });
   }
- 
-  // Products grid
+
+  // ─── Grid Top commandes ───
   const grid = document.getElementById('productsGrid');
   if (grid) {
-    const allProds = Object.entries(summaryData.by_product)
-      .sort((a,b) => b[1]-a[1]).slice(0,10);
-    grid.innerHTML = allProds.map(([name, ca], i) => `
+    grid.innerHTML = top5.map((o, i) => `
       <div class="product-card">
-        <div class="product-rank">#${i+1}</div>
-        <div class="product-name">${name}</div>
-        <div class="product-ca">${fmt(ca)}</div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:${(ca/maxVal*100).toFixed(1)}%"></div></div>
+        <div class="product-rank">#${i + 1}</div>
+        <div class="product-name">Commande #${o.ID_Commande}</div>
+        <div class="product-ca">${fmt(o.CA_Net)}</div>
+        <div class="product-bar">
+          <div class="product-bar-fill" style="width:${(o.CA_Net / maxVal * 100).toFixed(1)}%"></div>
+        </div>
       </div>
     `).join('');
   }
@@ -210,8 +219,10 @@ function renderProducts() {
 // ─── Analytics ───────────────────────────────────────────────────
 function renderAnalytics() {
   if (!summaryData) return;
+
   const s = summaryData;
-  const margin = s.ca_brut_total > 0 ? ((s.ca_total/s.ca_brut_total)*100).toFixed(1) : 0;
+  const margin = s.ca_brut_total > 0 ? ((s.ca_total / s.ca_brut_total) * 100).toFixed(1) : 0;
+
   const metrics = [
     { label: 'CA Brut Total', value: fmt(s.ca_brut_total), desc: 'Avant remises' },
     { label: 'CA Net Total', value: fmt(s.ca_total), desc: 'Après remises' },
@@ -219,10 +230,13 @@ function renderAnalytics() {
     { label: 'CA TTC Total', value: fmt(s.ca_total + s.tva_total), desc: 'CA Net + TVA' },
     { label: 'Taux Net/Brut', value: margin + '%', desc: 'Efficacité remises' },
     { label: 'Panier Moyen', value: fmt(s.avg_order), desc: 'Par commande' },
-    { label: 'Meilleures ventes', value: `#${s.best_product_id}`, desc: s.best_product_name },
+
+    // ✅ CORRIGÉ
+    { label: 'Meilleure commande', value: `#${s.best_order_id}`, desc: fmt(s.best_order_ca) },
+
     { label: 'Nb Transactions', value: s.total_orders, desc: 'Total commandes' },
   ];
- 
+
   document.getElementById('analyticsGrid').innerHTML = metrics.map(m => `
     <div class="analytics-card">
       <div class="analytics-label">${m.label}</div>
@@ -230,6 +244,7 @@ function renderAnalytics() {
       <div class="analytics-desc">${m.desc}</div>
     </div>
   `).join('');
+
  
   // Category bar chart
   const ctx = document.getElementById('chartCatBar');
@@ -546,7 +561,7 @@ function selectProduct(name) {
   }
 
   const rows = summaryData.rows.filter(r => r.Produit === name);
-  if (rows.length === 0) { showToast('Aucune commande pour ce produit', 'error'); return; }
+  if (rows.length === 0) { showToast('Aucune ligne trouvée pour ce produit', 'error'); return; }
 
   // Remplir le simulateur avec le prix moyen
   const avgPrix = rows.reduce((s, r) => s + parseFloat(r.Prix), 0) / rows.length;
@@ -635,7 +650,7 @@ function selectProduct(name) {
     });
   }
 
-  showToast('Analyse de ' + name + ' chargee', 'success');
+  showToast('Analyse chargée : ' + name, 'success');
 }
 
 
@@ -669,7 +684,7 @@ async function loadMatplotlibChart() {
     if (row) name = row.Produit;
   }
 
-  if (!name) { showToast('Produit non trouvé', 'error'); return; }
+  if (!name) { showToast('Produit non trouvé dans les commandes', 'error'); return; }
 
   const container = document.getElementById('mplChartContainer');
   container.innerHTML = '<p style="color:var(--text-secondary)">⏳ Génération du graphique...</p>';
@@ -687,4 +702,3 @@ async function loadMatplotlibChart() {
     <img src="${data.image_url}?t=${Date.now()}" style="width:100%; border-radius:10px;" alt="Graphique ${name}"/>
   `;
 }
-

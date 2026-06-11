@@ -43,7 +43,8 @@ def index():
 @app.route("/api/summary")
 def api_summary():
     summary = get_analysis()
-    return jsonify(summary)
+    # Exclure 'rows' (lourd) — déjà servi par /api/orders
+    return jsonify({k: v for k, v in summary.items() if k != "rows"})
 
 
 @app.route("/api/orders")
@@ -139,11 +140,11 @@ def api_chart_product():
     from charts import chart_ca_single_product
     name = request.args.get("name", "")
     if not name:
-        return jsonify({"error": "name required"}), 400
+        return jsonify({"error": "Paramètre 'name' requis"}), 400
     summary = get_analysis()
     path = chart_ca_single_product(name, summary)
     if not path:
-        return jsonify({"error": "Produit non trouvé"}), 404
+        return jsonify({"error": f"Commandes introuvables pour le produit : {name}"}), 404
     filename = path.replace("static/images/", "")
     return jsonify({"image_url": f"/static/images/{filename}"})
 

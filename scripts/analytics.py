@@ -63,64 +63,62 @@ def get_id(row: Dict[str, Any]) -> str:
  
  
 def get_summary(results: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Retourne un résumé global : CA Total, meilleur produit, etc."""
+    """Résumé global des ventes avec meilleure commande."""
+    if not results:
+        return {}
+
     ca_total = sum(r["CA_Net"] for r in results)
     tva_total = sum(r["TVA"] for r in results)
     ca_brut_total = sum(r["CA_Brut"] for r in results)
+
     total_orders = len(results)
-    avg_order = round(ca_total / total_orders, 2) if total_orders else 0
- 
-    # Grouper par produit et additionner les CA
-    product_totals = {}
-    for r in results:
-        prod = r.get("Produit", get_id(r))
-        product_totals[prod] = round(product_totals.get(prod, 0) + r["CA_Net"], 2)
- 
-    best_prod_name = max(product_totals, key=product_totals.get)
-    worst_prod_name = min(product_totals, key=product_totals.get)
- 
-    best = next(r for r in results if r.get("Produit", get_id(r)) == best_prod_name)
-    worst = next(r for r in results if r.get("Produit", get_id(r)) == worst_prod_name)
- 
-    best = {**best, "CA_Net": product_totals[best_prod_name]}
-    worst = {**worst, "CA_Net": product_totals[worst_prod_name]}
- 
+    avg_order = round(ca_total / total_orders, 2)
+
+    # Meilleure commande (max CA_Net)
+    best_order = max(results, key=lambda r: r["CA_Net"])
+    worst_order = min(results, key=lambda r: r["CA_Net"])
+
+    # Catégories
     by_category: Dict[str, float] = {}
     for r in results:
         cat = r.get("Categorie", "Autre")
         by_category[cat] = round(by_category.get(cat, 0) + r["CA_Net"], 2)
- 
+
+    # CA par produit (pour le simulateur)
     by_product: Dict[str, float] = {}
     for r in results:
-        prod = r.get("Produit", get_id(r))
+        prod = r.get("Produit", "Autre")
         by_product[prod] = round(by_product.get(prod, 0) + r["CA_Net"], 2)
- 
-    top5 = sorted(by_product.items(), key=lambda x: x[1], reverse=True)[:5]
- 
-    monthly: Dict[str, float] = {}
-    months = ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun",
-              "Jul", "Aou", "Sep", "Oct", "Nov", "Dec"]
+
+    # CA mensuel (index cyclique sur 12 mois car pas de date dans le CSV)
+    months = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun",
+              "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"]
+    monthly_ca: Dict[str, float] = {m: 0.0 for m in months}
     for i, r in enumerate(results):
         m = months[i % 12]
-        monthly[m] = round(monthly.get(m, 0) + r["CA_Net"], 2)
- 
+        monthly_ca[m] = round(monthly_ca[m] + r["CA_Net"], 2)
+
+    # Top 5 commandes
+    top5_orders = sorted(results, key=lambda r: r["CA_Net"], reverse=True)[:5]
+
     return {
         "ca_total": round(ca_total, 2),
         "ca_brut_total": round(ca_brut_total, 2),
         "tva_total": round(tva_total, 2),
         "total_orders": total_orders,
         "avg_order": avg_order,
-        "best_product_id": best.get("ID_Produit", "—"),
-        "best_product_name": best.get("Produit", "—"),
-        "best_product_ca": best["CA_Net"],
-        "worst_product_id": worst.get("ID_Produit", "—"),
+
+        "best_order_id": best_order.get("ID_Commande"),
+        "best_order_ca": best_order["CA_Net"],
+
+        "worst_order_id": worst_order.get("ID_Commande"),
+
+        "top5_orders": top5_orders,
         "by_category": by_category,
         "by_product": by_product,
-        "top5_products": top5,
-        "monthly_ca": monthly,
+        "monthly_ca": monthly_ca,
         "rows": results,
     }
- 
  
 def run_full_analysis(csv_path: str = "data/ventes.csv") -> Dict[str, Any]:
     """Pipeline complet : chargement -> calcul -> export -> résumé."""
@@ -130,7 +128,7 @@ def run_full_analysis(csv_path: str = "data/ventes.csv") -> Dict[str, Any]:
     summary = get_summary(results)
     print(f"\nCA Total : {summary['ca_total']:,.2f} DT")
     print(f"Commandes : {summary['total_orders']}")
-    print(f"Meilleur produit : ID {summary['best_product_id']} - {summary['best_product_name']}")
+    print(f"Meilleure commande : ID {summary['best_order_id']} - {summary['best_order_ca']:.2f} DT")
     return summary
  
  

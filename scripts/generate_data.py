@@ -5,7 +5,8 @@ Génère un fichier ventes.csv avec des données de démonstration réalistes.
  
 import csv
 import random
- 
+from datetime import date, timedelta
+
 PRODUCTS = [
     ("Smartphone Samsung", 599.99),
     ("Laptop Dell", 1199.99),
@@ -29,12 +30,17 @@ WEIGHTS = [15, 8, 20, 10, 12, 18, 22, 7, 9, 14, 16, 6, 25, 19, 23]
  
 def generate_ventes(filename: str = "data/ventes.csv", n: int = 2000) -> None:
     """Génère n lignes de ventes et les écrit dans filename."""
+    # Période de 12 mois glissants jusqu'à aujourd'hui
+    end_date = date.today()
+    start_date = date(end_date.year - 1, end_date.month, 1)
+    total_days = (end_date - start_date).days
+
     with open(filename, "w", newline="", encoding="cp1252") as f:
         writer = csv.writer(f)
-        writer.writerow(["ID_Commande", "ID_Produit", "Produit", "Prix", "Quantite", "Remise", "Categorie"])
- 
+        writer.writerow(["ID_Commande", "ID_Produit", "Produit", "Prix", "Quantite", "Remise", "Categorie", "Date"])
+
         produit_ids = {name: 200 + i for i, (name, _) in enumerate(PRODUCTS)}
- 
+
         for i in range(1, n + 1):
             product_name, base_price = random.choices(PRODUCTS, weights=WEIGHTS, k=1)[0]
             price = round(base_price * random.uniform(0.9, 1.1), 2)
@@ -42,8 +48,10 @@ def generate_ventes(filename: str = "data/ventes.csv", n: int = 2000) -> None:
             discount = random.choice([0, 0, 0, 5, 5, 10, 10, 15, 20, 25])
             category = get_category(product_name)
             id_produit = produit_ids[product_name]
-            writer.writerow([1000 + i, id_produit, product_name, price, quantity, discount, category])
- 
+            order_date = start_date + timedelta(days=random.randint(0, total_days))
+            writer.writerow([1000 + i, id_produit, product_name, price, quantity, discount, category,
+                             order_date.strftime("%Y-%m-%d")])
+
     print(f"✅ {n} lignes générées dans {filename}")
  
  
