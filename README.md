@@ -12,7 +12,7 @@ L'application remplace un fichier Excel classique devenu trop volumineux par un 
 
 - Générer et importer des fichiers CSV de ventes
 - Calculer automatiquement le **CA Brut**, le **CA Net** et la **TVA (20%)**
-- Identifier le **meilleur produit** par chiffre d'affaires
+- Identifier la **meilleure commande** par chiffre d'affaires
 - Afficher des **graphiques interactifs** par produit, catégorie et mois
 - Simuler n'importe quelle transaction en temps réel
 - Exporter les résultats dans un fichier `resultats_final.csv`
