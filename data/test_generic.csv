@@ -1,0 +1,5 @@
+﻿OrderID,SKU,Description,Qty,UnitPrice,OrderDate
+1001,A01,Wireless Mouse,2,25.50,2026-01-15
+1001,B02,Keyboard,1,45.00,2026-01-15
+1002,A01,Wireless Mouse,3,25.50,2026-01-16
+1003,C03,USB Hub,5,12.00,2026-01-20
