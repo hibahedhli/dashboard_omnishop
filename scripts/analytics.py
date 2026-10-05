@@ -10,7 +10,7 @@ category performance and time-based analysis when dates are available.
 import csv
 import os
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 try:
@@ -651,6 +651,158 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
                         "de cette évolution."
                     ),
                 })
+
+    # Product trend detection: compare equal-length periods across months
+    if summary.get("has_date"):
+        rows = summary.get("rows") or []
+        dated_rows = []
+
+        for row in rows:
+            date_value = row.get("date")
+            if not date_value:
+                continue
+
+            try:
+                parsed_date = datetime.strptime(str(date_value)[:10], "%Y-%m-%d")
+                dated_rows.append((parsed_date, row))
+            except (ValueError, TypeError):
+                continue
+
+        if dated_rows:
+            max_date = max(item[0] for item in dated_rows)
+
+            # Compare the current month up to the latest available day
+            # with the same number of days from the previous month.
+            current_start = max_date.replace(day=1)
+            period_days = max_date.day
+
+            if period_days >= 2:
+                if current_start.month == 1:
+                    previous_year = current_start.year - 1
+                    previous_month = 12
+                else:
+                    previous_year = current_start.year
+                    previous_month = current_start.month - 1
+
+                previous_start = current_start.replace(
+                    year=previous_year,
+                    month=previous_month,
+                    day=1,
+                )
+                previous_end = previous_start + timedelta(days=period_days - 1)
+
+                current_product_revenue = defaultdict(float)
+                previous_product_revenue = defaultdict(float)
+
+                for parsed_date, row in dated_rows:
+                    product_name = (
+                        row.get("product_name")
+                        or row.get("product_id")
+                    )
+
+                    if not product_name:
+                        continue
+
+                    product_name = str(product_name).strip()
+                    revenue = float(row.get("CA_Net") or 0)
+
+                    if current_start <= parsed_date <= max_date:
+                        current_product_revenue[product_name] += revenue
+                    elif previous_start <= parsed_date <= previous_end:
+                        previous_product_revenue[product_name] += revenue
+
+                previous_period_total = sum(previous_product_revenue.values())
+
+                if previous_period_total > 0:
+                    candidates = []
+
+                    for product_name, previous_revenue in previous_product_revenue.items():
+                        current_revenue = current_product_revenue.get(product_name, 0)
+
+                        # Ignore products with insignificant previous-period sales.
+                        if previous_revenue < previous_period_total * 0.05:
+                            continue
+
+                        variation = (
+                            (current_revenue - previous_revenue)
+                            / previous_revenue
+                        ) * 100
+
+                        if variation <= -20:
+                            candidates.append(
+                                (
+                                    variation,
+                                    product_name,
+                                    previous_revenue,
+                                    current_revenue,
+                                )
+                            )
+
+                    if candidates:
+                        variation, product_name, previous_revenue, current_revenue = min(
+                            candidates,
+                            key=lambda item: item[0],
+                        )
+
+                        insights.append({
+                            "type": "warning",
+                            "title": "Produit en forte baisse",
+                            "message": (
+                                f"Le CA du produit « {product_name} » a diminué de "
+                                f"{abs(variation):.1f}% sur la période comparable "
+                                f"({fmt_currency(previous_revenue)} DT ? "
+                                f"{fmt_currency(current_revenue)} DT)."
+                            ),
+                            "action": (
+                                "Vérifier son stock, son prix, sa disponibilité et "
+                                "les éventuelles causes de baisse de demande."
+                            ),
+                        })
+
+                    growth_candidates = []
+
+                    for product_name, previous_revenue in previous_product_revenue.items():
+                        current_revenue = current_product_revenue.get(product_name, 0)
+
+                        # Ignore products with insignificant previous-period sales.
+                        if previous_revenue < previous_period_total * 0.05:
+                            continue
+
+                        variation = (
+                            (current_revenue - previous_revenue)
+                            / previous_revenue
+                        ) * 100
+
+                        if variation >= 20:
+                            growth_candidates.append(
+                                (
+                                    variation,
+                                    product_name,
+                                    previous_revenue,
+                                    current_revenue,
+                                )
+                            )
+
+                    if growth_candidates:
+                        variation, product_name, previous_revenue, current_revenue = max(
+                            growth_candidates,
+                            key=lambda item: item[0],
+                        )
+
+                        insights.append({
+                            "type": "success",
+                            "title": "Produit en forte croissance",
+                            "message": (
+                                f"Le CA du produit « {product_name} » a augmenté de "
+                                f"{variation:.1f}% sur la période comparable "
+                                f"({fmt_currency(previous_revenue)} DT → "
+                                f"{fmt_currency(current_revenue)} DT)."
+                            ),
+                            "action": (
+                                "Analyser les facteurs de cette croissance et vérifier "
+                                "si cette dynamique peut être maintenue."
+                            ),
+                        })
 
     return insights
 
