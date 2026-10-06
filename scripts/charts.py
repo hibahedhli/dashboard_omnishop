@@ -30,9 +30,9 @@ def _safe_filename(value: str) -> str:
     return value[:100] or "product"
 
 
-def _format_dt(value: float) -> str:
+def _format_currency(value: float, symbol: str = "?") -> str:
     """Format a monetary value for chart labels."""
-    return f"{value:,.2f} DT"
+    return f"{symbol}{value:,.2f}"
 
 
 def _style_axes(ax):
@@ -313,11 +313,16 @@ def chart_ca_single_product(
 
     product_name = str(product_name).strip()
 
+    currency = summary.get("currency") or {}
+    currency_symbol = currency.get("symbol") or "?"
+
     rows = [
         row
         for row in summary.get("rows", [])
-        if str(row.get("product_name") or "").strip().lower()
-        == product_name.lower()
+        if (
+            str(row.get("product_name") or "").strip().lower() == product_name.lower()
+            or str(row.get("product_id") or "").strip().lower() == product_name.lower()
+        )
     ]
 
     if not rows:
@@ -339,12 +344,12 @@ def chart_ca_single_product(
     )
 
     total_tax = sum(
-        float(row.get("TVA", 0))
+        float(row.get("TVA") or 0)
         for row in rows
     )
 
     total_ttc = sum(
-        float(row.get("CA_TTC", 0))
+        float(row.get("CA_TTC") or 0)
         for row in rows
     )
 
@@ -392,7 +397,7 @@ def chart_ca_single_product(
         ax1.text(
             bar.get_x() + bar.get_width() / 2,
             bar.get_height() + max_value * 0.02,
-            _format_dt(value),
+            _format_currency(value, currency_symbol),
             ha="center",
             va="bottom",
             color="white",
@@ -403,7 +408,7 @@ def chart_ca_single_product(
     _style_axes(ax1)
 
     ax1.set_ylabel(
-        "Amount (DT)",
+        "Amount",
         color="#94a3b8",
         fontsize=10,
     )
@@ -454,7 +459,7 @@ def chart_ca_single_product(
         ax2.text(
             bar.get_x() + bar.get_width() / 2,
             bar.get_height() + max_indicator * 0.02,
-            _format_dt(value),
+            _format_currency(value, currency_symbol),
             ha="center",
             va="bottom",
             color="white",
@@ -465,7 +470,7 @@ def chart_ca_single_product(
     _style_axes(ax2)
 
     ax2.set_ylabel(
-        "Amount (DT)",
+        "Amount",
         color="#94a3b8",
         fontsize=10,
     )

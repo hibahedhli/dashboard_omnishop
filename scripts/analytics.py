@@ -707,34 +707,49 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
                 current_product_revenue = defaultdict(float)
                 previous_product_revenue = defaultdict(float)
+                product_names = {}
 
                 for parsed_date, row in dated_rows:
-                    product_name = (
-                        row.get("product_name")
-                        or row.get("product_id")
+                    product_id = row.get("product_id")
+                    product_name = row.get("product_name")
+
+                    product_key = (
+                        str(product_id).strip()
+                        if product_id
+                        else str(product_name).strip()
+                        if product_name
+                        else ""
                     )
 
-                    if not product_name:
+                    if not product_key:
                         continue
 
-                    product_name = str(product_name).strip()
+                    display_name = (
+                        str(product_name).strip()
+                        if product_name
+                        else product_key
+                    )
+
+                    product_names[product_key] = display_name
+
                     revenue = float(row.get("CA_Net") or 0)
 
                     if current_start <= parsed_date <= max_date:
-                        current_product_revenue[product_name] += revenue
+                        current_product_revenue[product_key] += revenue
                     elif previous_start <= parsed_date <= previous_end:
-                        previous_product_revenue[product_name] += revenue
+                        previous_product_revenue[product_key] += revenue
 
                 previous_period_total = sum(previous_product_revenue.values())
 
                 if previous_period_total > 0:
                     candidates = []
 
-                    for product_name, previous_revenue in previous_product_revenue.items():
-                        current_revenue = current_product_revenue.get(product_name, 0)
+                    for product_key, previous_revenue in previous_product_revenue.items():
+                        current_revenue = current_product_revenue.get(product_key, 0)
+                        product_name = product_names.get(product_key, product_key)
 
                         # Ignore products with insignificant previous-period sales.
-                        if previous_revenue < previous_period_total * 0.05:
+                        if previous_revenue < 1000:
                             continue
 
                         variation = (
@@ -775,11 +790,12 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
                     growth_candidates = []
 
-                    for product_name, previous_revenue in previous_product_revenue.items():
-                        current_revenue = current_product_revenue.get(product_name, 0)
+                    for product_key, previous_revenue in previous_product_revenue.items():
+                        current_revenue = current_product_revenue.get(product_key, 0)
+                        product_name = product_names.get(product_key, product_key)
 
                         # Ignore products with insignificant previous-period sales.
-                        if previous_revenue < previous_period_total * 0.05:
+                        if previous_revenue < 1000:
                             continue
 
                         variation = (

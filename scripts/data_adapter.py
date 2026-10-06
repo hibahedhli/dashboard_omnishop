@@ -530,5 +530,3 @@ def adapt_dataset(filepath: str) -> Dict[str, Any]:
         "rows": normalized_rows,
         "profile": profile,
     }
-
-

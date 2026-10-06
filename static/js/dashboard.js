@@ -947,8 +947,148 @@ async function populateCategoryFilter() {
   }
 }
 
+
+async function searchProduct() {
+  const input = document.getElementById('simSearch');
+  const suggestions = document.getElementById('simSuggestions');
+
+  if (!input || !suggestions) return;
+
+  const query = input.value.trim();
+
+  if (!query) {
+    suggestions.innerHTML = '';
+    suggestions.style.display = 'none';
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `/api/orders?search=${encodeURIComponent(query)}&page=1&per_page=10`
+    );
+
+    if (!res.ok) {
+      throw new Error('Product search failed');
+    }
+
+    const data = await res.json();
+    const rows = data.rows || [];
+
+    const products = [];
+    const seen = new Set();
+
+    rows.forEach(row => {
+      const id = String(row.product_id || '').trim();
+      const name = String(row.product_name || '').trim();
+
+      const key = `${id}|${name}`;
+
+      if (!seen.has(key) && (id || name)) {
+        seen.add(key);
+        products.push({ id, name });
+      }
+    });
+
+    if (!products.length) {
+      suggestions.innerHTML =
+        '<div style="padding:.75rem;color:var(--text-secondary);">No product found</div>';
+      suggestions.style.display = 'block';
+      return;
+    }
+
+    suggestions.innerHTML = products.map(product => `
+      <div
+        class="sim-product-suggestion"
+        data-product-id="${product.id.replace(/"/g, '&quot;')}"
+        data-product-name="${product.name.replace(/"/g, '&quot;')}"
+        style="padding:.65rem .8rem;cursor:pointer;"
+      >
+        <strong>${product.name || 'Unnamed product'}</strong>
+        ${product.id ? `<small style="display:block;color:var(--text-secondary);">${product.id}</small>` : ''}
+      </div>
+    `).join('');
+
+    suggestions.style.display = 'block';
+
+    suggestions.querySelectorAll('.sim-product-suggestion').forEach(item => {
+      item.addEventListener('click', () => {
+        input.value = item.dataset.productName || item.dataset.productId || '';
+        input.dataset.productId = item.dataset.productId || '';
+        suggestions.style.display = 'none';
+      });
+    });
+
+  } catch (error) {
+    console.error(error);
+    suggestions.innerHTML =
+      '<div style="padding:.75rem;color:#ef4444;">Search failed</div>';
+    suggestions.style.display = 'block';
+  }
+}
+
+async function selectProductFromSearch() {
+  const input = document.getElementById('simSearch');
+
+  if (!input) return;
+
+  const query = input.value.trim();
+
+  if (!query) {
+    showToast('Enter a product name or ID first.', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `/api/orders?search=${encodeURIComponent(query)}&page=1&per_page=1`
+    );
+
+    if (!res.ok) {
+      throw new Error('Product search failed');
+    }
+
+    const data = await res.json();
+    const row = (data.rows || [])[0];
+
+    if (!row) {
+      showToast('Product not found.', 'error');
+      return;
+    }
+
+    const price = parseFloat(row.price);
+
+    if (Number.isFinite(price) && price > 0) {
+      const priceInput = document.getElementById('simPrice');
+
+      if (priceInput) {
+        priceInput.value = price;
+      }
+    }
+
+    input.value = row.product_name || row.product_id || query;
+    input.dataset.productId = row.product_id || '';
+
+    const label = document.getElementById('simPriceLabel');
+
+    if (label) {
+      label.textContent = `Unit price (${getCurrencyConfig().symbol || '?'})`;
+    }
+
+    document.getElementById('simSuggestions')?.style.setProperty(
+      'display',
+      'none'
+    );
+
+    simulate();
+
+  } catch (error) {
+    console.error(error);
+    showToast('Unable to analyze this product.', 'error');
+  }
+}
+
 function setupSimulator() {
-  const range = document.getElementById('simRemise');
+  const range = document.getElementById('simDiscount');
 
   range?.addEventListener('input', () => {
     const value = document.getElementById('remiseVal');
@@ -959,26 +1099,29 @@ function setupSimulator() {
     simulate();
   });
 
-  document.getElementById('simPrix')
-    ?.addEventListener('input', simulate);
-
   document.getElementById('simQte')
     ?.addEventListener('input', simulate);
 }
 
-async function simulate() {
+window.simulate = async function simulate() {
   const price =
-    parseFloat(document.getElementById('simPrix')?.value) || 0;
+    parseFloat(document.getElementById('simPrice')?.value) || 0;
 
   const quantity =
     parseInt(document.getElementById('simQte')?.value) || 1;
 
   const discount =
-    parseFloat(document.getElementById('simRemise')?.value) || 0;
+    parseFloat(document.getElementById('simDiscount')?.value) || 0;
 
   if (price <= 0 || quantity <= 0) return;
 
   try {
+    console.log('SIMULATOR INPUT:', {
+      price,
+      quantity,
+      discount
+    });
+
     const res = await fetch('/api/simulate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -991,6 +1134,8 @@ async function simulate() {
 
     const data = await res.json();
 
+    console.log('SIMULATOR RESPONSE:', data);
+
     if (!res.ok || data.error) {
       throw new Error(data.error || 'Simulation failed');
     }
@@ -998,7 +1143,7 @@ async function simulate() {
     document.getElementById('simCaBrut').textContent =
       fmt(data.ca_brut);
 
-    document.getElementById('simRemiseMnt').textContent =
+    document.getElementById('simDiscountMnt').textContent =
       `- ${fmt(data.remise_montant)}`;
 
     document.getElementById('simCaNet').textContent =
@@ -1452,14 +1597,7 @@ async function loadMatplotlibChart() {
     input?.value.trim() || '';
 
   if (!query) {
-    showToast('Enter a product name', 'error');
-    return;
-  }
-
-  const name = findProductName(query);
-
-  if (!name) {
-    showToast('Product not found', 'error');
+    showToast('Enter a product name or ID', 'error');
     return;
   }
 
@@ -1469,35 +1607,36 @@ async function loadMatplotlibChart() {
   if (!container) return;
 
   container.innerHTML =
-    '<p style="color:var(--text-secondary)">Generating chart…</p>';
+    '<p style="color:var(--text-secondary)">Generating chart?</p>';
 
   try {
     const res =
       await fetch(
-        `/api/chart_product?name=${encodeURIComponent(name)}`
+        `/api/chart_product?name=${encodeURIComponent(query)}`
       );
 
     const data = await res.json();
 
-    if (!res.ok || data.error) {
-      throw new Error(data.error || 'Chart error');
+    if (!res.ok) {
+      throw new Error(data.error || 'Unable to generate chart');
     }
 
     container.innerHTML = `
-      <p style="color:#a5b4fc;margin-bottom:.75rem;font-weight:600">
-        ${escapeHtml(name)}
-      </p>
       <img
         src="${data.image_url}?t=${Date.now()}"
-        style="width:100%;border-radius:10px;"
-        alt="Graphique ${escapeHtml(name)}"
-      />
+        alt="Detailed product revenue analysis"
+        style="width:100%;max-width:1200px;border-radius:12px;"
+      >
     `;
   } catch (error) {
-    console.error(error);
+    console.error('Product chart error:', error);
 
-    container.innerHTML =
-      `<p style="color:#f43f5e">${escapeHtml(error.message)}</p>`;
+    container.innerHTML = '';
+
+    showToast(
+      error.message || 'Unable to generate chart',
+      'error'
+    );
   }
 }
 
@@ -1578,19 +1717,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.head.appendChild(style);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
