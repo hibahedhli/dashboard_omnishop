@@ -3,11 +3,12 @@ app.py - Flask server for the OmniShop sales intelligence dashboard.
 """
 
 from pathlib import Path
+import json
 
 from flask import Flask, jsonify, render_template, request, send_from_directory
 
 from scripts.generate_data import generate_ventes
-from scripts.analytics import run_full_analysis
+from scripts.analytics import run_full_analysis, generate_insights
 from scripts.charts import generate_all_charts
 
 
@@ -19,6 +20,32 @@ DATA_DIR.mkdir(exist_ok=True)
 
 VENTES_CSV = DATA_DIR / "ventes.csv"
 RESULTS_CSV = DATA_DIR / "resultats_final.csv"
+DATASET_CONFIG = DATA_DIR / "dataset_config.json"
+
+
+def get_currency_config():
+    """Load the fallback currency configuration for the active dataset."""
+    default = {
+        "currency": "TND",
+        "symbol": "DT",
+        "locale": "fr-TN",
+    }
+
+    if not DATASET_CONFIG.exists():
+        return default
+
+    try:
+        with DATASET_CONFIG.open("r", encoding="utf-8-sig") as file:
+            config = json.load(file)
+
+        return {
+            "currency": config.get("currency", default["currency"]),
+            "symbol": config.get("symbol", default["symbol"]),
+            "locale": config.get("locale", default["locale"]),
+        }
+
+    except (OSError, json.JSONDecodeError):
+        return default
 
 app = Flask(
     __name__,
@@ -49,6 +76,26 @@ def get_analysis(force=False):
         or _cache_mtime != current_mtime
     ):
         summary = run_full_analysis(str(VENTES_CSV))
+
+        detected_currency = (
+            summary.get("profile", {})
+            .get("currency", {})
+        )
+
+        if detected_currency.get("detected"):
+            summary["currency"] = {
+                "currency": detected_currency.get("code"),
+                "symbol": detected_currency.get("symbol"),
+                "locale": "en-GB" if detected_currency.get("code") == "GBP" else "fr-TN",
+                "source": "column",
+            }
+        else:
+            summary["currency"] = {
+                **get_currency_config(),
+                "source": "config",
+            }
+
+        summary["insights"] = generate_insights(summary)
 
         try:
             generate_all_charts(summary)

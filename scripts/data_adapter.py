@@ -22,6 +22,7 @@ CANONICAL_FIELDS = [
     "vat_rate",
     "category",
     "date",
+    "currency",
 ]
 
 
@@ -122,6 +123,18 @@ COLUMN_ALIASES = {
         "product category",
         "cat",
     ],
+    "currency": [
+        "currency",
+        "devise",
+        "currency_code",
+        "currencycode",
+        "currency code",
+        "curr",
+        "iso_currency",
+        "iso currency",
+        "iso_code",
+        "iso code",
+    ],
     "date": [
         "date",
         "order_date",
@@ -204,6 +217,71 @@ def find_column(columns: List[str], aliases: List[str]) -> Optional[str]:
             return normalized_columns[normalized_alias]
 
     return None
+
+
+CURRENCY_MAP = {
+    "TND": "DT",
+    "EUR": "€",
+    "USD": "$",
+    "GBP": "£",
+    "CHF": "CHF",
+    "CAD": "C$",
+    "AUD": "A$",
+    "JPY": "¥",
+    "CNY": "¥",
+    "AED": "د.إ",
+    "SAR": "﷼",
+}
+
+
+def detect_currency(
+    rows: List[Dict[str, Any]],
+    currency_column: Optional[str],
+) -> Dict[str, Any]:
+    """Detect the dataset currency from a currency column when available."""
+
+    if not currency_column:
+        return {
+            "detected": False,
+            "code": None,
+            "symbol": None,
+            "source": None,
+        }
+
+    values = []
+
+    for row in rows:
+        value = row.get(currency_column)
+
+        if value is None:
+            continue
+
+        normalized = str(value).strip().upper()
+
+        if normalized and normalized not in values:
+            values.append(normalized)
+
+        if len(values) > 1:
+            break
+
+    if len(values) != 1:
+        return {
+            "detected": False,
+            "code": None,
+            "symbol": None,
+            "source": "column" if values else None,
+            "values": values,
+        }
+
+    code = values[0]
+    symbol = CURRENCY_MAP.get(code, code)
+
+    return {
+        "detected": True,
+        "code": code,
+        "symbol": symbol,
+        "source": "column",
+    }
 
 
 def detect_schema(columns: List[str]) -> Dict[str, Optional[str]]:
@@ -441,6 +519,10 @@ def adapt_dataset(filepath: str) -> Dict[str, Any]:
         normalized_rows,
     )
 
+    profile["currency"] = detect_currency(
+        rows,
+        mapping.get("currency"),
+    )
     profile["encoding"] = encoding
     profile["mapping"] = mapping
 

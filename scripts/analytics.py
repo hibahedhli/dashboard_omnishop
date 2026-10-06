@@ -1,4 +1,4 @@
-"""
+﻿"""
 analytics.py
 Sales intelligence engine.
 
@@ -21,8 +21,14 @@ except ImportError:
 
 
 def fmt_currency(value: float) -> str:
-    """Format a currency value using French/Tunisian notation."""
+    """Format a currency value using the dashboard numeric notation."""
     return f"{value:,.2f}".replace(",", " ").replace(".", ",")
+
+
+def get_currency_symbol(summary: Dict[str, Any]) -> str:
+    """Return the configured display currency symbol for the dataset."""
+    currency = summary.get("currency", {}) or {}
+    return currency.get("symbol") or "DT"
 
 def load_csv(filepath: str) -> List[Dict[str, Any]]:
     """
@@ -433,13 +439,14 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
         action   : possible business action or investigation
     """
     insights: List[Dict[str, Any]] = []
+    currency_symbol = get_currency_symbol(summary)
 
     # 1. Top revenue-driving product
     top_products = summary.get("top5_products") or []
 
     if top_products:
         top_product = top_products[0]
-        product_name = top_product.get("product_name", "Produit")
+        product_name = top_product.get("product_name", "Product")
         product_revenue = float(top_product.get("revenue", 0) or 0)
         total_revenue = float(summary.get("ca_total", 0) or 0)
 
@@ -448,14 +455,14 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
             insights.append({
                 "type": "success",
-                "title": "Principal moteur du CA",
+                "title": "Top Revenue Driver",
                 "message": (
-                    f"{product_name} génère {fmt_currency(product_revenue)} DT "
-                    f"de CA net, soit {share:.1f}% du CA total."
+                    f"{product_name} generates {fmt_currency(product_revenue)} {currency_symbol} "
+                    f"in net revenue, representing {share:.1f}% of total revenue."
                 ),
                 "action": (
-                    "Surveiller sa disponibilité et analyser les facteurs "
-                    "qui expliquent sa performance."
+                    "Monitor its availability and analyze the factors "
+                    "behind its performance."
                 ),
             })
 
@@ -472,22 +479,22 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
         if top_count == 1:
             concentration_message = (
-                f"Le produit principal représente "
-                f"{concentration:.1f}% du CA net."
+                f"The top product represents "
+                f"{concentration:.1f}% of net revenue."
             )
         else:
             concentration_message = (
-                f"Les {top_count} premiers produits représentent "
-                f"{concentration:.1f}% du CA net."
+                f"The top {top_count} products represent "
+                f"{concentration:.1f}% of net revenue."
             )
 
         insights.append({
             "type": "info",
-            "title": "Concentration du chiffre d'affaires",
+            "title": "Revenue Concentration",
             "message": concentration_message,
             "action": (
-                "Évaluer la dépendance à ces produits et identifier "
-                "d'autres produits capables de diversifier le CA."
+                "Evaluate dependence on these products and identify "
+                "other products that could diversify revenue."
             ),
         })
 
@@ -520,21 +527,21 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
                     key=lambda item: item[0]
                 )
 
-                product_name = product.get("product_name") or product.get("product_id") or "Produit"
+                product_name = product.get("product_name") or product.get("product_id") or "Product"
 
                 insights.append({
                     "type": "warning",
-                    "title": "Volume élevé, contribution au CA limitée",
+                    "title": "High Volume, Low Revenue Contribution",
                     "message": (
-                        f"{product_name} représente "
-                        f"{quantity_share * 100:.1f}% des unités vendues, "
-                        f"mais seulement {revenue_share * 100:.1f}% du CA net."
+                        f"{product_name} represents "
+                        f"{quantity_share * 100:.1f}% of units sold, "
+                        f"but only {revenue_share * 100:.1f}% of net revenue."
                     ),
                     "action": (
-                        "Analyser son prix, sa marge et son rôle dans les ventes "
-                        "pour déterminer s'il s'agit d'un produit d'appel, "
-                        "d'une opportunité de montée en gamme ou d'un produit "
-                        "à faible contribution."
+                        "Analyze its price, margin, and role in sales "
+                        "to determine whether it is an entry-level product, "
+                        "an upselling opportunity, or a product "
+                        "with low revenue contribution."
                     ),
                 })
 
@@ -554,14 +561,14 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
             order_id = summary.get("best_order_id")
             insights.append({
                 "type": "warning",
-                "title": "Commande exceptionnellement élevée",
+                "title": "Exceptionally Large Order",
                 "message": (
-                    f"La commande #{order_id} atteint {fmt_currency(float(best_order))} DT, "
-                    f"soit environ {ratio:.1f} fois le panier moyen."
+                    f"Order #{order_id} reaches {fmt_currency(float(best_order))} {currency_symbol}, "
+                    f"approximately {ratio:.1f} times the average order value."
                 ),
                 "action": (
-                    "Examiner sa composition pour comprendre les produits "
-                    "ou quantités responsables de cette valeur élevée."
+                    "Examine its composition to understand which products "
+                    "or quantities are responsible for this high value."
                 ),
             })
 
@@ -573,14 +580,14 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
         insights.append({
             "type": "success",
-            "title": "Catégorie la plus performante",
+            "title": "Best Performing Category",
             "message": (
-                f"La catégorie « {best_category} » génère "
-                f"{fmt_currency(float(category_revenue))} DT de CA net."
+                f"The category \"{best_category}\" generates "
+                f"{fmt_currency(float(category_revenue))} {currency_symbol} in net revenue."
             ),
             "action": (
-                "Comparer ses produits et identifier les caractéristiques "
-                "qui expliquent sa performance."
+                "Compare its products and identify the characteristics "
+                "behind its performance."
             ),
         })
 
@@ -612,16 +619,16 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
         if is_partial_month:
             insights.append({
                 "type": "info",
-                "title": "Mois en cours partiel",
+                "title": "Current Month Is Partial",
                 "message": (
-                    f"Le CA net du mois {current_month} atteint actuellement "
-                    f"{fmt_currency(current_value)} DT, mais les données ne couvrent "
-                    f"que jusqu'au {max_date_obj.day} "
-                    f"{["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"][max_date_obj.month - 1]}."
+                    f"Net revenue for {current_month} currently reaches "
+                    f"{fmt_currency(current_value)} {currency_symbol}, but the data only covers "
+                    f"up to day {max_date_obj.day} "
+                    f"{["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][max_date_obj.month - 1]}."
                 ),
                 "action": (
-                    "Attendre la fin du mois avant de comparer directement "
-                    "sa performance avec le mois précédent."
+                    "Wait until the end of the month before directly comparing "
+                    "its performance with the previous month."
                 ),
             })
 
@@ -636,19 +643,26 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
                 ) * 100
 
                 trend_type = "success" if variation > 0 else "warning"
-                direction = "augmenté" if variation > 0 else "diminué"
+                direction = "increased" if variation > 0 else "decreased"
 
                 insights.append({
                     "type": trend_type,
-                    "title": "Évolution récente du CA",
+                    "title": "Recent Revenue Trend",
                     "message": (
-                        f"Le CA net a {direction} de "
-                        f"{abs(variation):.1f}% entre "
-                        f"{previous_month} et {current_month}."
+                        f"Net revenue {direction} by "
+                        f"{abs(variation):.1f}% between "
+                        f"{previous_month} and {current_month}."
+                        + (
+                            " Note: the current month is incomplete, so this change "
+                            "should not be interpreted as a full-month comparison."
+                            if current_month == max(monthly.keys())
+                            and current_month != previous_month
+                            else ""
+                        )
                     ),
                     "action": (
-                        "Analyser les produits et catégories responsables "
-                        "de cette évolution."
+                        "Analyze the products and categories "
+                        "responsible for this trend."
                     ),
                 })
 
@@ -746,16 +760,16 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
                         insights.append({
                             "type": "warning",
-                            "title": "Produit en forte baisse",
+                            "title": "Product in Sharp Decline",
                             "message": (
-                                f"Le CA du produit « {product_name} » a diminué de "
-                                f"{abs(variation):.1f}% sur la période comparable "
-                                f"({fmt_currency(previous_revenue)} DT ? "
-                                f"{fmt_currency(current_revenue)} DT)."
+                                f"Net revenue for product \"{product_name}\" decreased by "
+                                f"{abs(variation):.1f}% over the comparable period "
+                                f"({fmt_currency(previous_revenue)} {currency_symbol} → "
+                                f"{fmt_currency(current_revenue)} {currency_symbol})."
                             ),
                             "action": (
-                                "Vérifier son stock, son prix, sa disponibilité et "
-                                "les éventuelles causes de baisse de demande."
+                                "Check its stock, price, and availability, and "
+                                "investigate possible causes of declining demand."
                             ),
                         })
 
@@ -791,16 +805,16 @@ def generate_insights(summary: Dict[str, Any]) -> List[Dict[str, Any]]:
 
                         insights.append({
                             "type": "success",
-                            "title": "Produit en forte croissance",
+                            "title": "Product in Sharp Growth",
                             "message": (
-                                f"Le CA du produit « {product_name} » a augmenté de "
-                                f"{variation:.1f}% sur la période comparable "
-                                f"({fmt_currency(previous_revenue)} DT → "
-                                f"{fmt_currency(current_revenue)} DT)."
+                                f"Net revenue for product \"{product_name}\" increased by "
+                                f"{variation:.1f}% over the comparable period "
+                                f"({fmt_currency(previous_revenue)} {currency_symbol} → "
+                                f"{fmt_currency(current_revenue)} {currency_symbol})."
                             ),
                             "action": (
-                                "Analyser les facteurs de cette croissance et vérifier "
-                                "si cette dynamique peut être maintenue."
+                                "Analyze the factors behind this growth and check "
+                                "whether this trend can be sustained."
                             ),
                         })
 
@@ -841,25 +855,29 @@ def run_full_analysis(
 
     print()
     print(f"CA Total : {summary['ca_total']:,.2f} DT")
-    print(f"Lignes de vente : {summary['total_rows']}")
+    print(f"Sales rows: {summary['total_rows']}")
 
     if summary["total_orders"] is not None:
-        print(f"Commandes : {summary['total_orders']}")
+        print(f"Orders: {summary['total_orders']}")
         print(
-            f"Meilleure commande : "
+            f"Largest order: "
             f"ID {summary['best_order_id']} - "
             f"{summary['best_order_ca']:.2f} DT"
         )
     else:
-        print("Commandes : identifiant de commande non dÃ©tectÃ©")
+        print("Orders: order ID not detected")
 
-    print(f"Produits : {summary['product_count']}")
+    print(f"Products: {summary['product_count']}")
 
     return summary
 
 
 if __name__ == "__main__":
     run_full_analysis()
+
+
+
+
 
 
 

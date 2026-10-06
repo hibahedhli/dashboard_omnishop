@@ -11,6 +11,79 @@ const PALETTE = [
   '#facc15', '#34d399', '#38bdf8', '#e879f9', '#f472b6'
 ];
 
+const DISPLAY_CATEGORY_NAMES = {
+  'Accessoire': 'Accessories',
+  'Peripherique': 'Peripherals',
+  'Informatique': 'Computing',
+  'Stockage': 'Storage',
+  'Wearable': 'Wearables',
+  'Audio': 'Audio',
+  'Mobile': 'Mobile',
+  'Affichage': 'Displays'
+};
+
+const DISPLAY_PRODUCT_NAMES = {
+  'Tapis de souris XL': 'XL Mouse Pad',
+  'Chargeur USB-C': 'USB-C Charger',
+  'Souris Razer': 'Razer Mouse',
+  'Laptop Dell': 'Dell Laptop',
+  'Clavier Logitech': 'Logitech Keyboard',
+  'Disque SSD 1TB': '1TB SSD',
+  'Montre Apple Watch': 'Apple Watch',
+  'Casque Bose': 'Bose Headphones',
+  'Webcam Logitech': 'Logitech Webcam',
+  'Smartphone Samsung': 'Samsung Smartphone',
+  'Ecouteurs Sony': 'Sony Earbuds',
+  'Hub USB': 'USB Hub',
+  'Imprimante HP': 'HP Printer',
+  'Ecran LG 27': 'LG 27" Monitor',
+  'Tablette iPad': 'iPad Tablet'
+};
+
+function displayCategoryName(name) {
+  return DISPLAY_CATEGORY_NAMES[name] || name;
+}
+
+function displayProductName(name) {
+  return DISPLAY_PRODUCT_NAMES[name] || name;
+}
+
+function getCurrencyConfig() {
+  return state.summary?.currency || {
+    currency: 'TND',
+    symbol: 'DT',
+    locale: 'fr-TN'
+  };
+}
+
+function getCurrencySymbol() {
+  return getCurrencyConfig().symbol || 'DT';
+}
+
+function updateCurrencyLabels() {
+  const label = document.getElementById('simPriceLabel');
+  if (label) {
+    label.textContent = `Unit price (${getCurrencySymbol()})`;
+  }
+}
+
+function fmtCurrency(value) {
+  const config = getCurrencyConfig();
+  const number = Number(value) || 0;
+
+  try {
+    return new Intl.NumberFormat(config.locale || 'en-GB', {
+      style: 'currency',
+      currency: config.currency || 'TND',
+      maximumFractionDigits: 2
+    }).format(number);
+  } catch (error) {
+    return `${number.toLocaleString('en-US', {
+      maximumFractionDigits: 2
+    })} ${config.symbol || ''}`.trim();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadSummary();
   setupNav();
@@ -25,6 +98,7 @@ async function loadSummary() {
     if (!res.ok) throw new Error('Summary request failed');
 
     state.summary = await res.json();
+    updateCurrencyLabels();
 
     renderOverview();
     renderProducts();
@@ -34,7 +108,7 @@ async function loadSummary() {
     setupProductSearch();
   } catch (error) {
     console.error(error);
-    showToast('Erreur lors du chargement des données', 'error');
+    showToast('Error loading data', 'error');
   }
 }
 
@@ -108,13 +182,13 @@ function renderOverview() {
   const s = state.summary;
   if (!s) return;
 
-  animateValue('kpiCANet', s.ca_total || 0, 'DT');
+  animateValue('kpiCANet', s.ca_total || 0, getCurrencySymbol());
   const ordersKpi = document.getElementById('kpiOrders');
   const avgKpi = document.getElementById('kpiAvg');
 
   if (s.has_order_id) {
     animateValue('kpiOrders', s.total_orders ?? 0, '');
-    animateValue('kpiAvg', s.avg_order || 0, 'DT');
+    animateValue('kpiAvg', s.avg_order || 0, getCurrencySymbol());
   } else {
     if (ordersKpi) ordersKpi.textContent = 'N/D';
     if (avgKpi) avgKpi.textContent = 'N/D';
@@ -122,7 +196,7 @@ function renderOverview() {
   const vatAvailable = s.tva_total !== null && s.tva_total !== undefined;
 
   if (vatAvailable) {
-    animateValue('kpiTVA', s.tva_total, 'DT');
+    animateValue('kpiTVA', s.tva_total, getCurrencySymbol());
   } else {
     const vatKpi = document.getElementById('kpiTVA');
     if (vatKpi) vatKpi.textContent = 'N/D';
@@ -141,13 +215,13 @@ function renderOverview() {
   const avgDelta = document.getElementById('kpiAvgDelta');
   const tvaDelta = document.getElementById('kpiTVADelta');
 
-  if (canetDelta) canetDelta.textContent = `${netRatio.toFixed(1)}% du CA brut`;
-  if (ordersDelta) ordersDelta.textContent = `${s.total_rows ?? 0} lignes de vente`;
-  if (avgDelta) avgDelta.textContent = s.has_order_id ? 'Par commande' : 'ID commande absent';
+  if (canetDelta) canetDelta.textContent = `${netRatio.toFixed(1)}% of gross revenue`;
+  if (ordersDelta) ordersDelta.textContent = `${s.total_rows ?? 0} sales rows`;
+  if (avgDelta) avgDelta.textContent = s.has_order_id ? 'Per order' : 'Order ID unavailable';
   if (tvaDelta) {
     tvaDelta.textContent = vatRate !== null
-      ? `${vatRate.toFixed(1)}% du CA net`
-      : 'Non disponible dans ce dataset';
+      ? `${vatRate.toFixed(1)}% of net revenue`
+      : 'Not available in this dataset';
   }
 
   const bestName = document.getElementById('bestName');
@@ -155,7 +229,7 @@ function renderOverview() {
 
   if (bestName) {
     bestName.textContent = s.has_order_id && s.best_order_id != null
-      ? `Commande #${s.best_order_id}`
+      ? `Order #${s.best_order_id}`
       : 'N/D';
   }
 
@@ -170,6 +244,20 @@ function renderOverview() {
   renderInsights(s.insights);
 }
 
+function displayInsightText(text) {
+  let result = String(text ?? "");
+
+  for (const [rawName, displayName] of Object.entries(DISPLAY_PRODUCT_NAMES)) {
+    result = result.split(rawName).join(displayName);
+  }
+
+  for (const [rawName, displayName] of Object.entries(DISPLAY_CATEGORY_NAMES)) {
+    result = result.split(rawName).join(displayName);
+  }
+
+  return result;
+}
+
 function renderInsights(insights) {
   const container = document.getElementById("insightsGrid");
   if (!container) return;
@@ -178,8 +266,8 @@ function renderInsights(insights) {
     container.innerHTML = `
       <div class="insight-card insight-info">
         <div class="insight-content">
-          <h3>Aucun insight disponible</h3>
-          <p>Les données disponibles ne permettent pas encore de générer une analyse automatique.</p>
+          <h3>No insights available</h3>
+          <p>The available data is not sufficient to generate an automatic analysis yet.</p>
         </div>
       </div>
     `;
@@ -204,10 +292,10 @@ function renderInsights(insights) {
       <article class="insight-card insight-${type}">
         <div class="insight-icon">${icon}</div>
         <div class="insight-content">
-          <h3>${escapeHtml(insight.title || "Insight commercial")}</h3>
-          <p>${escapeHtml(insight.message || "")}</p>
+          <h3>${escapeHtml(displayInsightText(insight.title || "Commercial Insight"))}</h3>
+          <p>${escapeHtml(displayInsightText(insight.message || ""))}</p>
           ${insight.action
-            ? `<div class="insight-action">→ ${escapeHtml(insight.action)}</div>`
+            ? `<div class="insight-action">→ ${escapeHtml(displayInsightText(insight.action))}</div>`
             : ""}
         </div>
       </article>
@@ -229,10 +317,10 @@ function animateValue(id, to, suffix) {
     const ease = 1 - Math.pow(1 - progress, 3);
     const value = target * ease;
 
-    if (suffix === 'DT' || isFloat) {
-      el.textContent = suffix === 'DT'
-        ? fmt(value)
-        : value.toFixed(1);
+    if (suffix) {
+      el.textContent = fmtCurrency(value);
+    } else if (isFloat) {
+      el.textContent = value.toFixed(1);
     } else {
       el.textContent = Math.floor(value).toLocaleString('fr-FR');
     }
@@ -246,13 +334,7 @@ function animateValue(id, to, suffix) {
 }
 
 function fmt(value) {
-  const number = Number(value) || 0;
-
-  return new Intl.NumberFormat('fr-TN', {
-    style: 'currency',
-    currency: 'TND',
-    maximumFractionDigits: 2
-  }).format(number);
+  return fmtCurrency(value);
 }
 
 function axisStyle() {
@@ -308,7 +390,7 @@ function renderChartMonthly() {
         const message = document.createElement('p');
         message.className = 'chart-unavailable-message';
         message.textContent =
-          "Analyse mensuelle indisponible : aucune colonne de date n'a été détectée dans ce dataset.";
+          "Monthly analysis unavailable: no date column was detected in this dataset.";
         container.appendChild(message);
       }
     }
@@ -322,7 +404,7 @@ function renderChartMonthly() {
     data: {
       labels,
       datasets: [{
-        label: 'CA Net (DT)',
+        label: `Net Revenue (${getCurrencySymbol()})`,
         data: values,
         borderColor: '#6366f1',
         backgroundColor: 'rgba(99,102,241,0.15)',
@@ -345,7 +427,7 @@ function renderChartMonthly() {
           ...axisStyle(),
           ticks: {
             ...axisStyle().ticks,
-            callback: value => `${(value / 1000).toFixed(0)}kDT`
+            callback: value => `${(value / 1000).toFixed(0)}k${getCurrencySymbol()}`
           }
         }
       }
@@ -362,7 +444,7 @@ function renderChartCategories() {
   destroyChart('categories');
 
   const cats = s.by_category || {};
-  const labels = Object.keys(cats);
+  const labels = Object.keys(cats).map(displayCategoryName);
 
   if (!s.has_category || labels.length === 0) {
     const container = ctx.parentElement;
@@ -417,12 +499,14 @@ function renderProducts() {
       type: 'bar',
       data: {
         labels: products.map(product =>
-          product.product_name ||
-          product.product_id ||
-          'Produit inconnu'
+          displayProductName(
+            product.product_name ||
+            product.product_id ||
+            'Unknown product'
+          )
         ),
         datasets: [{
-          label: 'CA Net',
+          label: 'Net Revenue',
           data: products.map(product => product.revenue || 0),
           backgroundColor: PALETTE.slice(0, products.length),
           borderRadius: 8,
@@ -441,7 +525,7 @@ function renderProducts() {
             ...axisStyle(),
             ticks: {
               ...axisStyle().ticks,
-              callback: value => `${(value / 1000).toFixed(0)}kDT`
+              callback: value => `${(value / 1000).toFixed(0)}k${getCurrencySymbol()}`
             }
           },
           y: axisStyle()
@@ -458,7 +542,7 @@ function renderProducts() {
     state.charts.brutNet = new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: ['CA Brut', 'CA Net', 'TVA'],
+        labels: ['Gross Revenue', 'Net Revenue', 'VAT'],
         datasets: [{
           data: [
             s.ca_brut_total || 0,
@@ -482,7 +566,7 @@ function renderProducts() {
             ...axisStyle(),
             ticks: {
               ...axisStyle().ticks,
-              callback: value => `${(value / 1000).toFixed(0)}kDT`
+              callback: value => `${(value / 1000).toFixed(0)}k${getCurrencySymbol()}`
             }
           }
         }
@@ -494,15 +578,16 @@ function renderProducts() {
 
   if (grid) {
     if (products.length === 0) {
-      grid.innerHTML = '<p>Aucun produit disponible.</p>';
+      grid.innerHTML = '<p>No products available.</p>';
       return;
     }
 
     grid.innerHTML = products.map((product, index) => {
-      const name =
-        product.product_name ||
-        product.product_id ||
-        'Produit inconnu';
+        const name = displayProductName(
+          product.product_name ||
+          product.product_id ||
+          'Unknown product'
+        );
 
       const revenue = Number(product.revenue) || 0;
 
@@ -533,50 +618,50 @@ function renderAnalytics() {
 
   const metrics = [
     {
-      label: 'CA Brut Total',
+      label: 'Total Gross Revenue',
       value: fmt(s.ca_brut_total),
-      desc: 'Avant remises'
+      desc: 'Before Discounts'
     },
     {
-      label: 'CA Net Total',
+      label: 'Total Net Revenue',
       value: fmt(s.ca_total),
-      desc: 'Après remises'
+      desc: 'After Discounts'
     },
     {
-      label: 'TVA Collectée',
+      label: 'Collected VAT',
       value: s.tva_total != null ? fmt(s.tva_total) : 'N/D',
-      desc: 'Calculée sur le CA Net'
+      desc: 'Calculated from Net Revenue'
     },
     {
-      label: 'CA TTC Total',
+      label: 'Total Revenue incl. VAT',
       value: s.ca_ttc_total != null ? fmt(s.ca_ttc_total) : 'N/D',
-      desc: 'CA Net + TVA'
+      desc: 'Net Revenue + VAT'
     },
     {
-      label: 'Taux Net/Brut',
+      label: 'Net/Gross Rate',
       value: `${retention}%`,
-      desc: 'CA conservé après remises'
+      desc: 'Revenue retained after discounts'
     },
     {
-      label: 'Panier Moyen',
+      label: 'Average Order Value',
       value: s.has_order_id ? fmt(s.avg_order) : 'N/D',
-      desc: s.has_order_id ? 'Par commande' : 'ID commande absent'
+      desc: s.has_order_id ? 'Per order' : 'Order ID unavailable'
     },
     {
-      label: 'Meilleure commande',
+      label: 'Top Order',
       value: s.has_order_id && s.best_order_id != null
         ? `#${s.best_order_id}`
         : 'N/D',
       desc: s.has_order_id
         ? fmt(s.best_order_ca)
-        : 'ID commande absent'
+        : 'Order ID unavailable'
     },
     {
-      label: 'Nb commandes',
+      label: 'Number of Orders',
       value: s.has_order_id ? s.total_orders : 'N/D',
       desc: s.has_order_id
-        ? 'Commandes distinctes'
-        : 'ID commande absent'
+        ? 'Distinct Orders'
+        : 'Order ID unavailable'
     }
   ];
 
@@ -600,7 +685,7 @@ function renderAnalytics() {
     destroyChart('categoryBar');
 
     const cats = s.by_category || {};
-    const labels = Object.keys(cats);
+    const labels = Object.keys(cats).map(displayCategoryName);
     const categoryAvailable = s.has_category && labels.length > 0;
 
     if (!categoryAvailable) {
@@ -611,7 +696,7 @@ function renderAnalytics() {
       }
 
       categoryCard.querySelector('.chart-header h3').textContent =
-        'Analyse par catégorie';
+        'Category Analysis';
     } else {
       ctx.style.display = 'block';
 
@@ -620,7 +705,7 @@ function renderAnalytics() {
       }
 
       categoryCard.querySelector('.chart-header h3').textContent =
-        'Répartition CA par Catégorie';
+        'Revenue by Category';
 
       state.charts.categoryBar = new Chart(ctx, {
         type: 'bar',
@@ -645,7 +730,7 @@ function renderAnalytics() {
               ...axisStyle(),
               ticks: {
                 ...axisStyle().ticks,
-                callback: value => `${(value / 1000).toFixed(0)}kDT`
+                callback: value => `${(value / 1000).toFixed(0)}k${getCurrencySymbol()}`
               }
             }
           }
@@ -680,7 +765,7 @@ async function loadOrders() {
     renderPagination(data.total || 0);
   } catch (error) {
     console.error(error);
-    showToast('Erreur lors du chargement des commandes', 'error');
+    showToast('Error loading orders', 'error');
   }
 }
 
@@ -694,7 +779,7 @@ function renderOrdersTable(data) {
     tbody.innerHTML = `
       <tr>
         <td colspan="11" style="text-align:center;padding:2rem;">
-          Aucune donnée trouvée.
+          No data found.
         </td>
       </tr>
     `;
@@ -726,11 +811,11 @@ function renderOrdersTable(data) {
           </span>
         </td>
 
-        <td>${escapeHtml(String(productName))}</td>
+        <td>${escapeHtml(String(displayProductName(productName)))}</td>
 
         <td>
           <span class="badge badge-indigo">
-            ${escapeHtml(String(category))}
+            ${escapeHtml(String(displayCategoryName(category)))}
           </span>
         </td>
 
@@ -835,14 +920,12 @@ async function populateCategoryFilter() {
   if (!select || !s) return;
 
   if (!s.has_category) {
-    select.innerHTML = '<option value="">Catégorie indisponible</option>';
+    select.innerHTML = '<option value="">Category unavailable</option>';
     select.disabled = true;
     return;
   }
 
   select.disabled = false;
-
-  if (select.options.length > 1) return;
 
   try {
     const res = await fetch('/api/categories');
@@ -851,10 +934,12 @@ async function populateCategoryFilter() {
 
     const categories = await res.json();
 
+    select.innerHTML = '<option value="">All categories</option>';
+
     categories.forEach(category => {
       const option = document.createElement('option');
       option.value = category;
-      option.textContent = category;
+      option.textContent = displayCategoryName(category);
       select.appendChild(option);
     });
   } catch (error) {
@@ -946,7 +1031,7 @@ function renderSimChart(data) {
   state.charts.simulator = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['CA Brut', 'CA Net', 'TVA'],
+      labels: ['Gross Revenue', 'Net Revenue', 'VAT'],
       datasets: [{
         data: [
           data.ca_brut || 0,
@@ -970,7 +1055,7 @@ function renderSimChart(data) {
           ...axisStyle(),
           ticks: {
             ...axisStyle().ticks,
-            callback: value => `${(value / 1000).toFixed(0)}kDT`
+            callback: value => `${(value / 1000).toFixed(0)}k${getCurrencySymbol()}`
           }
         }
       }
@@ -1011,17 +1096,17 @@ function setupUpload() {
 
         const analyses = [
           {
-            label: 'Commandes',
+            label: 'Orders',
             available: fields.order_id?.detected === true
           },
           {
-            label: 'Produits',
+            label: 'Products',
             available:
               fields.product_name?.detected === true ||
               fields.product_id?.detected === true
           },
           {
-            label: 'Catégories',
+            label: 'Categories',
             available: fields.category?.detected === true
           },
           {
@@ -1039,7 +1124,7 @@ function setupUpload() {
           .join(' · ');
 
         status.innerHTML =
-          `<strong>Fichier importé et analysé !</strong><br>` +
+          `<strong>File imported and analyzed!</strong><br>` +
           `${profile.rows ?? 'N/D'} lignes · ` +
           `${profile.valid_rows ?? 'N/D'} valides · ` +
           `${profile.invalid_rows ?? 'N/D'} ignorées · ` +
@@ -1048,16 +1133,16 @@ function setupUpload() {
       }
 
       await loadSummary();
-      showToast('CSV importé avec succès', 'success');
+      showToast('CSV imported successfully', 'success');
     } catch (error) {
       console.error(error);
 
       if (status) {
         status.textContent =
-          `Erreur : ${error.message}`;
+          `Error: ${error.message}`;
       }
 
-      showToast('Échec de l’import CSV', 'error');
+      showToast('CSV import failed', 'error');
     } finally {
       input.value = '';
     }
@@ -1117,7 +1202,7 @@ function setupProductSearch() {
             border-bottom:1px solid rgba(255,255,255,0.05);
           "
         >
-          ${escapeHtml(product)}
+          ${escapeHtml(displayProductName(product))}
         </div>
       `).join('');
 
@@ -1150,6 +1235,12 @@ function findProductName(query) {
     product.toLowerCase() === normalized
   );
 
+    if (!name) {
+      name = names.find(product =>
+        displayProductName(product).toLowerCase() === normalized
+      );
+    }
+
   if (!name) {
     name = names.find(product =>
       product.toLowerCase().includes(normalized)
@@ -1173,7 +1264,7 @@ function loadProductAnalysis(query) {
   const name = findProductName(query);
 
   if (!name) {
-    showToast('Produit non trouvé', 'error');
+    showToast('Product not found', 'error');
     return;
   }
 
@@ -1189,7 +1280,7 @@ function loadProductAnalysis(query) {
       .filter(row => row.product_name === name);
 
   if (rows.length === 0) {
-    showToast('Aucune ligne trouvée pour ce produit', 'error');
+    showToast('No rows found for this product', 'error');
     return;
   }
 
@@ -1252,14 +1343,14 @@ function renderProductCharts(name, rows) {
         labels,
         datasets: [
           {
-            label: 'CA Brut',
+            label: 'Gross Revenue',
             data: caBrutValues,
             backgroundColor: 'rgba(139,92,246,0.7)',
             borderRadius: 6,
             borderSkipped: false
           },
           {
-            label: 'CA Net',
+            label: 'Net Revenue',
             data: caNetValues,
             backgroundColor: 'rgba(99,102,241,0.9)',
             borderRadius: 6,
@@ -1310,7 +1401,7 @@ function renderProductCharts(name, rows) {
     state.charts.productDonut = new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: ['CA Brut', 'CA Net', 'Remise', 'TVA'],
+        labels: ['Gross Revenue', 'Net Revenue', 'Discount', 'VAT'],
         datasets: [{
           data: [
             totalCaBrut,
@@ -1350,7 +1441,7 @@ function renderProductCharts(name, rows) {
     });
   }
 
-  showToast(`Analyse chargée : ${name}`, 'success');
+  showToast(`Analysis loaded: ${name}`, 'success');
 }
 
 async function loadMatplotlibChart() {
@@ -1361,14 +1452,14 @@ async function loadMatplotlibChart() {
     input?.value.trim() || '';
 
   if (!query) {
-    showToast('Entrez un nom de produit', 'error');
+    showToast('Enter a product name', 'error');
     return;
   }
 
   const name = findProductName(query);
 
   if (!name) {
-    showToast('Produit non trouvé', 'error');
+    showToast('Product not found', 'error');
     return;
   }
 
@@ -1378,7 +1469,7 @@ async function loadMatplotlibChart() {
   if (!container) return;
 
   container.innerHTML =
-    '<p style="color:var(--text-secondary)">Génération du graphique…</p>';
+    '<p style="color:var(--text-secondary)">Generating chart…</p>';
 
   try {
     const res =
@@ -1389,7 +1480,7 @@ async function loadMatplotlibChart() {
     const data = await res.json();
 
     if (!res.ok || data.error) {
-      throw new Error(data.error || 'Erreur graphique');
+      throw new Error(data.error || 'Chart error');
     }
 
     container.innerHTML = `

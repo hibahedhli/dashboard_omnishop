@@ -1,5 +1,0 @@
-﻿order_id,product_id,product_name,price,quantity,discount,vat_rate,category,date,_source_row,CA_Brut,Remise_Montant,CA_Net,TVA,CA_TTC
-1,,Product A,500.0,2,0.0,,,2026-09-01,1,1000.0,0.0,1000.0,,
-2,,Product A,500.0,2,0.0,,,2026-09-02,2,1000.0,0.0,1000.0,,
-3,,Product A,500.0,3,0.0,,,2026-10-01,3,1500.0,0.0,1500.0,,
-4,,Product A,500.0,3,0.0,,,2026-10-02,4,1500.0,0.0,1500.0,,

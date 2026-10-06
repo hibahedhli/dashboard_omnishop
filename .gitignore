@@ -5,3 +5,5 @@ scripts/__pycache__/
 *.pyc
 *.png
 
+
+data/resultats_final.csv
