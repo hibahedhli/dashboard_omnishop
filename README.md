@@ -1,179 +1,690 @@
-# OmniShop — Dashboard d'Automatisation des Ventes
+# Dashboard OmniShop
 
-> Projet de Fin d'Année · Matière : Logiciels · Faculté des Sciences de Tunis
+An end-to-end **sales analytics and business intelligence dashboard** that transforms transactional e-commerce data into revenue metrics, product and category analysis, automated business insights, interactive visualizations, and sales simulations.
+
+> **What the project is:** a Flask-based analytics application that processes transactional sales data, standardizes it, computes business KPIs, detects meaningful sales patterns, and exposes the results through an interactive web dashboard.
+
+> **What it is not:** it is not a universal BI platform that automatically understands every possible dataset. The input data must contain the fields required by the configured data adapter. Dataset-specific differences such as column names, currency and date representation are handled by the data-processing layer.
+
+> **Data note:** the current example dataset follows a UK online-retail transactional structure. Monetary values are therefore displayed in **GBP**. The application uses dynamic currency configuration rather than hard-coding one currency throughout the dashboard.
+
+```text
+Raw transactional data
+        ->
+Data adapter / normalization
+        ->
+Validation & cleaning
+        ->
+Sales metrics
+        ->
+Product / category analysis
+        ->
+Business insights
+        ->
+Flask API
+        ->
+Interactive dashboard
+        ->
+Simulation & decision support
+```
 
 ---
 
-## 1. Titre & Description
+# 1. Project Overview
 
-**OmniShop** est un dashboard web complet pour l'analyse automatisée des ventes d'une entreprise e-commerce.
+E-commerce businesses generate large volumes of transactional data, but raw sales records alone do not provide an immediate understanding of business performance.
 
-L'application remplace un fichier Excel classique devenu trop volumineux par un système d'analyse dynamique capable de :
+Dashboard OmniShop transforms those transactions into a centralized analytics interface where users can answer questions such as:
 
-- Générer et importer des fichiers CSV de ventes
-- Calculer automatiquement le **CA Brut**, le **CA Net** et la **TVA (20%)**
-- Identifier le **meilleur produit** par chiffre d'affaires
-- Afficher des **graphiques interactifs** par produit, catégorie et mois
-- Simuler n'importe quelle transaction en temps réel
-- Exporter les résultats dans un fichier `resultats_final.csv`
+- How much revenue was generated?
+- Which products generate the most revenue?
+- Which categories perform best?
+- Which products are growing or declining?
+- Are revenues concentrated in a small number of products?
+- What are the largest orders?
+- What is the recent revenue trend?
+- What would happen if price, quantity or discount changed?
 
-### Stack Technologique
-
-| Couche | Technologie |
-|--------|-------------|
-| Backend | **Python 3.13** · Flask |
-| Analyse données | **Python** · module CSV natif |
-| Visualisation Python | **Matplotlib** |
-| Frontend | **HTML5 · CSS3 · JavaScript ES2022** |
-| Graphiques web | **Chart.js 4** |
-| Typographie | Google Fonts (DM Sans · JetBrains Mono) |
+The project combines **data processing, business analytics, visualization and interactive web development** in one application.
 
 ---
 
-## 2. Prérequis
+# 2. Main Features
 
-Avant de lancer le projet, assurez-vous d'avoir installé :
-
-| Logiciel | Version minimale | Lien |
-|----------|-----------------|------|
-| **Python** | 3.10 ou plus | https://www.python.org/downloads/ |
-| **VS Code** | Dernière version | https://code.visualstudio.com/ |
-| **Extension Python** pour VS Code | — | Installer depuis VS Code Extensions |
-| **Navigateur web** | Chrome, Edge ou Firefox | — |
-
-> Node.js n'est **pas** nécessaire pour ce projet.
+| Feature | Description |
+|---|---|
+| **Sales KPIs** | Revenue, orders, products, quantities and other business indicators |
+| **Product analysis** | Search and analyze individual products |
+| **Category analysis** | Compare performance between product categories |
+| **Revenue analysis** | Analyze total and recent revenue trends |
+| **Business insights** | Automatically identify important sales patterns |
+| **Transaction search** | Search orders, products, categories and dates |
+| **Sales simulator** | Test price, quantity and discount scenarios |
+| **Dynamic currency** | Display monetary values according to the dataset configuration |
+| **Interactive dashboard** | Web interface connected to Flask APIs |
+| **Charts** | Visualize sales and product performance |
+| **REST-style API endpoints** | Separate frontend and backend analytics operations |
 
 ---
 
-## 3. Installation
+# 3. Dashboard
 
-### Étape 1 — Télécharger le projet
+The dashboard provides a centralized view of sales performance.
 
-Décompresser le fichier `dashboard_omnishop-main.zip` dans un dossier de votre choix.
+It combines:
 
-### Étape 2 — Ouvrir dans VS Code
+- KPI cards
+- Revenue visualizations
+- Product rankings
+- Category analysis
+- Transaction search
+- Automated insights
+- Product analysis
+- Sales simulation
 
+The frontend communicates with Flask API endpoints rather than embedding the analytics logic directly into the interface.
+
+---
+
+## Dashboard Architecture
+
+```text
+Browser
+   │
+   ├── Dashboard UI
+   ├── Product search
+   ├── Simulator
+   └── Charts
+          │
+          ▼
+      Flask API
+          │
+          ├── /api/orders
+          ├── /api/chart_product
+          ├── /api/simulate
+          └── Analytics endpoints
+                  │
+                  ▼
+          Data / Analytics Layer
+                  │
+                  ▼
+             ventes.csv
 ```
-Fichier → Ouvrir le dossier → sélectionner dashboard_omnishop-main
+
+---
+
+# 4. Data Architecture
+
+The application separates data processing from presentation.
+
+| Layer | Main responsibility |
+|---|---|
+| **Raw data** | Transactional sales records |
+| **Data adapter** | Normalize the input structure |
+| **Analytics** | Calculate business metrics and trends |
+| **Charts** | Generate analytical visualizations |
+| **Flask API** | Expose processed information to the frontend |
+| **Dashboard** | Present results interactively |
+| **Simulator** | Calculate hypothetical sales scenarios |
+
+The current transactional schema contains:
+
+```text
+ID_Commande
+ID_Produit
+Produit
+Prix
+Quantite
+Remise
+Categorie
+Date
 ```
 
-### Étape 3 — Ouvrir le terminal
+Each row represents a sales transaction/order line.
 
-```
-Ctrl + ù
+---
+
+# 5. Data Processing
+
+The application processes transactional data before calculating business indicators.
+
+The processing layer handles:
+
+- Data loading
+- Column normalization
+- Numeric conversion
+- Date parsing
+- Revenue calculations
+- Aggregation
+- Product-level aggregation
+- Category-level aggregation
+- Order-level aggregation
+- Currency configuration
+
+Revenue-related calculations are derived from the transaction information rather than manually entered dashboard values.
+
+---
+
+# 6. Business Analytics
+
+The analytics engine calculates several categories of indicators.
+
+### Revenue
+
+The application calculates:
+
+- Gross revenue
+- Discounts
+- Net revenue
+- Tax
+- Total revenue including tax
+
+### Orders
+
+The dashboard analyzes:
+
+- Number of orders
+- Order values
+- Largest orders
+- Average order-related metrics
+
+### Products
+
+Product-level analytics include:
+
+- Product revenue
+- Product sales volume
+- Product ranking
+- Product revenue trends
+- Product growth
+- Product decline
+
+### Categories
+
+Category-level analytics allow the user to identify the strongest-performing parts of the catalog.
+
+---
+
+# 7. Automated Business Insights
+
+One of the main features of the project is the automated generation of business insights.
+
+Instead of requiring the user to manually interpret every chart, the analytics layer identifies notable patterns.
+
+The current insight engine can detect:
+
+### Top Revenue Driver
+
+Identifies the product contributing the largest amount of revenue.
+
+### Revenue Concentration
+
+Shows how strongly revenue is concentrated among the highest-performing products.
+
+### Exceptionally Large Order
+
+Identifies unusually large orders in the transaction data.
+
+### Best Performing Category
+
+Determines which category contributes the most revenue.
+
+### Recent Revenue Trend
+
+Evaluates the recent evolution of revenue.
+
+### Product in Sharp Decline
+
+Identifies products whose revenue has decreased significantly between comparable periods.
+
+### Product in Sharp Growth
+
+Identifies products experiencing significant revenue growth.
+
+---
+
+# 8. Time-Based Product Analysis
+
+Product growth and decline are not calculated by simply comparing the entire dataset.
+
+The application compares **equivalent periods**.
+
+For an incomplete current month:
+
+```text
+Previous comparable period
+          ↓
+Current period
+          ↓
+Revenue comparison
+          ↓
+Percentage variation
+          ↓
+Growth / decline classification
 ```
 
-### Étape 4 — Se placer dans le bon dossier
+This avoids comparing a partial current month with an entire previous month, which could produce misleading conclusions.
+
+The current business rules identify:
+
+```text
+Sharp decline: variation ≤ -20%
+Sharp growth:  variation ≥ +20%
+```
+
+Products with insufficient previous-period revenue are excluded from the comparison to reduce noise.
+
+---
+
+# 9. Product Analysis
+
+Users can search for a product using its:
+
+- Product name
+- Product ID
+
+The backend then retrieves the corresponding transactions and generates a product-specific revenue chart.
+
+The search supports both human-readable product names and product identifiers.
+
+For example:
+
+```text
+Product ID:
+85123A
+
+Product:
+WHITE HANGING HEART T-LIGHT HOLDER
+```
+
+The generated analysis can include:
+
+- Revenue evolution
+- Product revenue
+- Tax
+- Total revenue including tax
+- Transaction-level aggregation
+
+---
+
+# 10. Sales Simulator
+
+The dashboard includes an interactive sales simulator for testing hypothetical transactions.
+
+Users can specify:
+
+```text
+Unit price
+Quantity
+Discount %
+```
+
+The simulator then calculates:
+
+```text
+Gross Revenue
+       ↓
+Discount Amount
+       ↓
+Net Revenue (before VAT)
+       ↓
+VAT
+       ↓
+Total Revenue
+```
+
+### Example
+
+```text
+Unit price:  £99.99
+Quantity:    3
+Discount:    10%
+
+Gross revenue:      £299.97
+Discount:           £30.00
+Net revenue (HT):   £269.97
+VAT:                £53.99
+Total revenue:      £323.96
+```
+
+The calculations are also exposed through the backend API.
+
+Example API request:
+
+```http
+POST /api/simulate
+```
+
+Example input:
+
+```json
+{
+  "prix": 10,
+  "quantite": 2,
+  "remise": 10
+}
+```
+
+Example response:
+
+```json
+{
+  "ca_brut": 20.0,
+  "ca_net": 18.0,
+  "ca_ttc": 21.6,
+  "remise_montant": 2.0,
+  "tva": 3.6
+}
+```
+
+---
+
+# 11. Dynamic Currency Handling
+
+The dashboard does not assume that every dataset uses Tunisian dinars or British pounds.
+
+Currency information is stored in the application configuration and propagated through the analytics and visualization layers.
+
+For example:
+
+```text
+GBP → £
+EUR → €
+USD → $
+TND → DT
+```
+
+This prevents currency-specific values from being hard-coded into charts and dashboard calculations.
+
+For the current dataset:
+
+```text
+Currency: GBP
+Symbol: £
+Locale: en-GB
+```
+
+---
+
+# 12. API
+
+The Flask backend exposes dedicated endpoints for the dashboard.
+
+Important endpoints include:
+
+| Endpoint | Purpose |
+|---|---|
+| `/api/orders` | Search and retrieve transaction data |
+| `/api/chart_product` | Generate a product-specific revenue chart |
+| `/api/simulate` | Calculate a hypothetical sales scenario |
+
+The API allows the frontend to remain relatively independent from the underlying Python analytics implementation.
+
+---
+
+# 13. Example Business Results
+
+The current dataset produces the following overall figures:
+
+| Metric | Result |
+|---|---:|
+| Total revenue | **£9,769,872.05** |
+| Sales rows | **540,453** |
+| Orders | **24,444** |
+| Products | **3,958** |
+
+### Top revenue-generating products
+
+| Product | Revenue |
+|---|---:|
+| DOTCOM POSTAGE | £206,245.48 |
+| REGENCY CAKESTAND 3 TIER | £164,762.19 |
+| PARTY BUNTING | £98,302.98 |
+| WHITE HANGING HEART T-LIGHT HOLDER | £97,894.50 |
+| JUMBO BAG RED RETROSPOT | £92,356.03 |
+
+> These figures describe the dataset included with the project. They should not be interpreted as current real-world company performance.
+
+---
+
+# 14. Technology Stack
+
+## Backend
+
+- Python
+- Flask
+- Pandas
+- NumPy
+
+## Data Analysis
+
+- Pandas
+- CSV
+- Custom analytics pipeline
+- Aggregation and statistical calculations
+
+## Visualization
+
+- Matplotlib
+- JavaScript charts
+
+## Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+
+## Development
+
+- Python virtual environment
+- Git
+- GitHub
+- VS Code
+
+---
+
+# 15. Project Structure
+
+```text
+dashboard_omnishop/
+│
+├── app.py
+│
+├── data/
+│   └── ventes.csv
+│
+├── scripts/
+│   ├── analytics.py
+│   ├── charts.py
+│   └── data_adapter.py
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   │   └── dashboard.js
+│   └── images/
+│
+├── templates/
+│   └── index.html
+│
+├── requirements.txt
+│
+└── README.md
+```
+
+---
+
+# 16. Installation
+
+Clone the repository:
 
 ```bash
-cd dashboard_omnishop-main
+git clone https://github.com/hibahedhli/dashboard_omnishop.git
+cd dashboard_omnishop
 ```
 
-### Étape 5 — Créer l'environnement virtuel
+Create a virtual environment:
 
 ```bash
-python -m venv .venv --without-pip
+python -m venv .venv
 ```
 
-### Étape 6 — Activer l'environnement virtuel
+Activate it on Windows:
 
-**Windows :**
-```bash
-.venv\Scripts\activate
+```powershell
+.venv\Scripts\Activate.ps1
 ```
 
-**Mac / Linux :**
-```bash
-source .venv/bin/activate
-```
-
-Le terminal affiche `(.venv)` — l'environnement est actif
-
-### Étape 7 — Installer pip
-
-```bash
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
-```
-
-### Étape 8 — Installer les dépendances
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Dépendances installées :
-
-| Package | Version | Rôle |
-|---------|---------|------|
-| Flask | 3.1.0 | Serveur web |
-| matplotlib | 3.9.0 | Graphiques Python |
-| Werkzeug | 3.1.3 | Utilitaires Flask |
-
 ---
 
-## 4. Utilisation
+# 17. Run the Application
 
-### Lancer le projet
+Start Flask:
 
 ```bash
 python app.py
 ```
 
-Le terminal affiche :
-```
-Running on http://127.0.0.1:5000
-```
+The dashboard will be available at:
 
-### Ouvrir le dashboard
-
-Ouvrir un navigateur et aller sur :
-```
-http://localhost:5000
+```text
+http://127.0.0.1:5000
 ```
 
-### Sections disponibles
+Open the address in your browser.
 
-| Section | Description |
-|---------|-------------|
-| **Dashboard** | Vue d'ensemble — KPIs, graphiques mensuels, meilleur produit |
-| **Commandes** | Tableau paginé avec recherche et filtre par catégorie |
-| **Produits** | Top 5 produits, CA Brut vs Net, grille de performance |
-| **Analytiques** | Indicateurs financiers avancés, répartition par catégorie |
-| **Simulateur** | Calcul instantané CA Brut/Net/TVA + analyse graphique par produit |
-| **Import / Export** | Importer CSV, générer des données, télécharger les résultats |
+---
 
-### Formules de calcul
+# 18. Example Workflow
 
-```
-CA Brut  = Prix x Quantite
-CA Net   = CA Brut x (1 - Remise / 100)
-TVA      = CA Net x 0.20
-CA TTC   = CA Net + TVA
-```
+A typical analysis follows this workflow:
 
-### Format CSV pour l'import
-
-```csv
-ID_Commande,ID_Produit,Produit,Prix,Quantite,Remise,Categorie
-1001,201,Laptop Dell,3799.00,1,5,Informatique
-1002,213,Chargeur USB-C,89.00,3,0,Accessoire
-```
-
-Le separateur doit etre une virgule et les decimales un point.
-
-### Arrêter le serveur
-
-```
-Ctrl + C
+```text
+1. Load transactional data
+          ↓
+2. Normalize and validate data
+          ↓
+3. Calculate revenue and sales metrics
+          ↓
+4. Aggregate products and categories
+          ↓
+5. Detect important business patterns
+          ↓
+6. Expose results through Flask APIs
+          ↓
+7. Display results in the dashboard
+          ↓
+8. Investigate individual products
+          ↓
+9. Simulate alternative sales scenarios
 ```
 
 ---
 
-## 5. Auteurs
+# 19. Limitations
 
-- Hiba Hedhli 
+The project has several important limitations.
+
+### Dataset dependency
+
+The analytics require a transactional dataset containing the fields necessary for the calculations.
+
+Datasets with substantially different structures may require a new adapter or configuration.
+
+### Revenue interpretation
+
+Revenue calculations depend on the meaning and quality of the source fields.
+
+Incorrect prices, quantities, discounts or taxes in the source data will affect the resulting analysis.
+
+### Currency
+
+Currency detection/configuration does not automatically convert between currencies.
+
+If a dataset contains multiple currencies, an explicit currency-handling strategy is required.
+
+### Product growth
+
+Growth and decline indicators depend on the available historical period and the chosen comparison window.
+
+A product with very low historical sales can produce unstable percentage variations.
+
+### Automated insights
+
+Business insights are rule-based analytical signals.
+
+They should be investigated by a human before being used for major business decisions.
+
+### Dataset quality
+
+Missing dates, invalid quantities, duplicate transactions or inconsistent product identifiers can affect the analysis.
 
 ---
 
-*Faculte des Sciences de Tunis — Projet de Fin d'Annee 2025/2026*
+# 20. Future Improvements
+
+Potential improvements include:
+
+- [ ] Customer-level analytics
+- [ ] Customer segmentation
+- [ ] Customer lifetime value
+- [ ] Customer churn prediction
+- [ ] Sales forecasting
+- [ ] Demand forecasting
+- [ ] Anomaly detection with machine learning
+- [ ] Advanced product recommendations
+- [ ] Interactive date-range filtering
+- [ ] Database integration
+- [ ] Authentication and user management
+- [ ] PDF / Excel report export
+- [ ] Cloud deployment
+- [ ] Automated scheduled reports
+- [ ] Advanced machine-learning insights
+
+---
+
+# 21. Project Goals
+
+This project was developed to demonstrate practical skills in:
+
+- Data analysis
+- Business intelligence
+- Data visualization
+- Python
+- Flask
+- REST API development
+- Frontend/backend integration
+- Data processing
+- Statistical analysis
+- Git and GitHub
+- Building decision-support tools from raw transactional data
+
+The project focuses on moving beyond simple dashboards by adding an **analytical layer capable of automatically identifying business-relevant patterns**.
+
+---
+
+# Author
+
+**Hiba Hedhli**
+
+LMI Student — Mathematics & Computer Science
+
+Interested in:
+
+- Data Science
+- Artificial Intelligence
+- Cybersecurity
+- Software Engineering
+- Business Intelligence
+
+---
+
+## License
+
+This project is available for educational and portfolio purposes.
