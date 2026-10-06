@@ -86,6 +86,38 @@ The frontend communicates with Flask API endpoints rather than embedding the ana
 
 ---
 
+## Dashboard Preview
+
+The dashboard provides an interactive view of sales performance, orders, product analysis, business insights, data management, and revenue simulation.
+
+### Dashboard Overview
+
+![Dashboard Overview](screenshots/dashboard-overview-01.png)
+
+![Dashboard Overview](screenshots/dashboard-overview-02.png)
+
+### Sales Analytics
+
+![Sales Analytics](screenshots/dashboard-analytics.png)
+
+### Orders
+
+![Orders](screenshots/dashboard-orders.png)
+
+### Import & Export
+
+![Import and Export](screenshots/dashboard-import-export.png)
+
+### Product Analysis
+
+![Product Revenue Chart](screenshots/dashboard-productchart.png)
+
+![Product Performance](screenshots/dashboard-products-performance.png)
+
+### Sales Simulator
+
+![Sales Simulator](screenshots/dashboard-simulator.png)
+
 ## Dashboard Architecture
 
 ```text
