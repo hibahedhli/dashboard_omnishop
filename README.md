@@ -707,14 +707,6 @@ The project focuses on moving beyond simple dashboards by adding an **analytical
 
 LMI Student — Mathematics & Computer Science
 
-Interested in:
-
-- Data Science
-- Artificial Intelligence
-- Cybersecurity
-- Software Engineering
-- Business Intelligence
-
 ---
 
 ## License
